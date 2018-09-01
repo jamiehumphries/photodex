@@ -1,0 +1,18 @@
+{{#each generations}}
+  <div class="generation {{toLowerCase region}}">
+    <div class="region-title">
+      <div class="region-name separator">{{region}}</div>
+      <div class="region-line separator"></div>
+    </div>
+    <div class="entries">
+      {{#each entries}}
+        <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
+          {{number}}
+        </div>
+      {{/each}}
+      {{#times 20}}
+        <div class="entry placeholder"></div>
+      {{/times}}
+    </div>
+  </div>
+{{/each}}

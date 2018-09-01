@@ -1,9 +1,31 @@
-<html>
-  <head>
-    <title>Hello world!</title>
-    <link rel="stylesheet" href="/css/main.css">
-  </head>
-  <body class="{{@exphbs.view}}-view">
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <title>Photódex</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="description" content="Photódex: Gotta snap 'em all!'">
+  <meta name="author" content="JT Atomico">
+  <meta property="og:title" content="JTAtomico's Photódex" />
+  <meta name="og:description" content="Gotta snap 'em all!'">
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="http://jtatomico.photodex.io/preview.jpg" />
+  <meta property="og:url" content="http://jtatomico.photodex.io/" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body class="{{@exphbs.view}}-view">
+  <div class="banner">
+    <h1>Photódex</h1>
+    {{#if trainer}}<div class="trainer-name">{{trainer}}</div>{{/if}}
+    <h2>{{subtitle}}</h2>
+  </div>
+  <div class="content">
     {{{body}}}
-  </body>
+  </div>
+</body>
+
 </html>

@@ -1,0 +1,107 @@
+.dex-view {
+  .entries {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .region-title {
+    color: $text-white;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+
+    .region-name {
+      font-size: 16px;
+      line-height: 20px;
+      height: 20px;
+      width: 80px;
+      padding: 5px 10px;
+      border-top-right-radius: 15px;
+      border-bottom-right-radius: 15px;
+      font-weight: bold;
+    }
+
+    .region-line {
+      flex: 1;
+      height: 3px;
+    }
+  }
+
+  @mixin generation($separtor-color, $entry-color) {
+    .separator {
+      background-color: $separtor-color;
+    }
+    .entry:not(.unobtainable) {
+      background-color: $entry-color;
+    }
+    .entry.unobtainable {
+      color: $entry-color;
+    }
+  }
+
+  .generation.kanto {
+    @include generation($separator-kanto, $entry-kanto);
+  }
+
+  .generation.johto {
+    @include generation($separator-johto, $entry-johto);
+  }
+
+  .generation.hoenn {
+    @include generation($separator-hoenn, $entry-hoenn);
+  }
+
+  @mixin entry($size) {
+    margin: calc(#{$size} / 32);
+    width: #{$size};
+    height: #{$size};
+    line-height: #{$size};
+    font-size: calc(0.375 * #{$size});
+  }
+
+  .entry {
+    color: $text-white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-radius: 10%;
+
+    @include entry(192px);
+    @media (max-width: 1200px) {
+      @include entry(160px);
+    }
+    @media (max-width: 960px) {
+      @include entry(128px);
+    }
+    @media (max-width: 720px) {
+      @include entry(96px);
+    }
+    @media (max-width: 480px) {
+      @include entry(64px);
+    }
+
+    img {
+      cursor: pointer;
+      max-width: 100%;
+      display: block;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    &.unobtainable {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &.placeholder {
+      height: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
+  }
+}

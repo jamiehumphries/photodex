@@ -1,0 +1,5 @@
+module.exports = Object.freeze([
+  { region: 'Kanto', start: 1, end: 151 },
+  { region: 'Johto', start: 152, end: 251 },
+  { region: 'Hoenn', start: 252, end: 386 }
+])
