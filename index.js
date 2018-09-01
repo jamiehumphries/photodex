@@ -30,11 +30,11 @@ app.get('/:trainer', async (req, res) => {
     const userId = await findUser(flickr, trainer)
     const photosetId = await findPhotodex(flickr, userId)
     const photoset = await getPhotoset(flickr, userId, photosetId)
-    const photoMap = getPhotoMap(photoset.photo)
+    const { photoMap, preview } = getPhotoMapAndPreview(photoset.photo)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
-    res.render('dex', { trainer, subtitle, generations, photoMap: JSON.stringify(photoMap) })
+    res.render('dex', { trainer, subtitle, preview, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     const subtitle = '404: Not found!'
     notFound(res, { trainer, subtitle, error: error.message })
@@ -107,16 +107,20 @@ function getPhotoset (flickr, userId, photosetId) {
   })
 }
 
-function getPhotoMap (photos) {
-  const map = {}
+function getPhotoMapAndPreview (photos) {
+  const photoMap = {}
+  let preview = null
   photos.forEach(photo => {
     const title = photo.title
     const match = title.match(/\d{3}/)
     if (match) {
-      map[match[0]] = { title, thumbUrl: photo.url_m, galleryUrl: photo.url_l }
+      photoMap[match[0]] = { title, thumbUrl: photo.url_m, galleryUrl: photo.url_l }
+    }
+    if (parseInt(photo.isprimary) === 1) {
+      preview = photo.url_l
     }
   })
-  return map
+  return { photoMap, preview }
 }
 
 function withDexEntries (generation, photoMap) {

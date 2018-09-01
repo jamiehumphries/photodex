@@ -8,11 +8,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta name="description" content="Photódex: Gotta snap 'em all!'">
   <meta name="author" content="JT Atomico">
-  <meta property="og:title" content="JTAtomico's Photódex" />
-  <meta name="og:description" content="Gotta snap 'em all!'">
+  {{#if trainer}}
+    <meta property="og:title" content="{{trainer}}'s Photódex" />
+    <meta property="og:url" content="http://www.photodex.io/{{trainer}}" />
+  {{else}}
+    <meta property="og:title" content="Photódex" />
+    <meta property="og:url" content="http://www.photodex.io/" />
+  {{/if}}
+  {{#if preview}}
+    <meta property="og:image" content="{{preview}}" />
+  {{else}}
+    <meta property="og:image" content="http://www.photodex.io/assets/preview.jpg" />
+  {{/if}}
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="http://jtatomico.photodex.io/preview.jpg" />
-  <meta property="og:url" content="http://jtatomico.photodex.io/" />
+  <meta name="og:description" content="Gotta snap 'em all!'">
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/css/main.css">
 </head>
