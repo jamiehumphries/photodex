@@ -8,7 +8,7 @@
       {{#each entries}}
         <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
           {{#if photo}}
-            <img class="thumbnail" src="{{photo.thumbUrl}}" alt="{{photo.title}}" data-number="{{number}}">
+            <img class="thumbnail" src="{{photo.thumbUrl}}" alt="{{photo.title}}" draggable="false" data-number="{{number}}">
           {{else}}
             {{number}}
           {{/if}}
@@ -21,9 +21,9 @@
   </div>
 {{/each}}
 <div id="gallery">
-  <img class="gallery-image previous">
-  <img class="gallery-image current">
-  <img class="gallery-image next">
+  <img class="gallery-image previous" draggable="false">
+  <img class="gallery-image current" draggable="false">
+  <img class="gallery-image next" draggable="false">
   <img id="close-button" src="assets/close.png">
 </div>
 

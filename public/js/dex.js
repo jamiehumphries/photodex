@@ -102,7 +102,7 @@ window.initGallery = function (photoMap) {
     $('.next').remove()
     $('.current').removeClass('current').addClass('next')
     $('.previous').removeClass('previous').addClass('current')
-    $('<img class="gallery-image previous">').prependTo($gallery)
+    $('<img class="gallery-image previous" draggable="false">').prependTo($gallery)
     setGalleryImage('previous', getPreviousSnap())
   }
 
@@ -123,7 +123,7 @@ window.initGallery = function (photoMap) {
     $('.previous').remove()
     $('.current').removeClass('current').addClass('previous')
     $('.next').removeClass('next').addClass('current')
-    $('<img class="gallery-image next">').prependTo($gallery)
+    $('<img class="gallery-image next" draggable="false">').prependTo($gallery)
     setGalleryImage('next', getNextSnap())
   }
 
