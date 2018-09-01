@@ -105,3 +105,54 @@
     }
   }
 }
+
+#gallery {
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+
+  &:not(.active) {
+    display: none;
+  }
+
+  img {
+    user-select: none;
+  }
+
+  .gallery-image {
+    max-height: 80%;
+    max-width: 80%;
+    box-shadow: 0px 0px 30px #C9C9FF;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: left 0.5s;
+    &.previous {
+      left: -200%;
+    }
+    &.next {
+      left: 200%;
+    }
+  }
+
+  #close-button {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    &:active {
+      opacity: 0.8;
+    }
+  }
+}

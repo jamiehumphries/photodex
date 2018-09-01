@@ -8,7 +8,7 @@
       {{#each entries}}
         <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
           {{#if photo}}
-            <img src="{{photo.thumbUrl}}" alt="{{photo.title}}">
+            <img class="thumbnail" src="{{photo.thumbUrl}}" alt="{{photo.title}}" data-number="{{number}}">
           {{else}}
             {{number}}
           {{/if}}
@@ -20,3 +20,16 @@
     </div>
   </div>
 {{/each}}
+<div id="gallery">
+  <img class="gallery-image previous">
+  <img class="gallery-image current">
+  <img class="gallery-image next">
+  <img id="close-button" src="assets/close.png">
+</div>
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.mobile.custom.min.js"></script>
+<script src="js/dex.js"></script>
+<script>
+  initGallery({{{photoMap}}});
+</script>

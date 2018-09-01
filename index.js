@@ -36,7 +36,7 @@ app.get('/:trainer', (req, res) => {
           const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
           const snapCount = Object.keys(photoMap).length
           const subtitle = `Snapped: ${snapCount}`
-          res.render('dex', { subtitle, generations, trainer })
+          res.render('dex', { subtitle, generations, trainer, photoMap: JSON.stringify(photoMap) })
         })
       })
     })
