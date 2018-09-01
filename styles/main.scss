@@ -2,6 +2,7 @@
 @import './colors';
 
 @import './views/dex';
+@import './views/error';
 
 body {
   background-color: $background-main;
@@ -25,6 +26,10 @@ body {
   left: 0;
   right: 0;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   h1, h2 {
     text-transform: uppercase;
   }
@@ -39,7 +44,7 @@ body {
     font-size: 16px;
   }
   h2 {
-    margin: 4px 0 0 0;
+    margin: 0 0 8px 0;
     font-size: 20px;
     color: $text-light;
   }
