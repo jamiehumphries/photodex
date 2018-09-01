@@ -5,7 +5,6 @@ window.initGallery = function (photoMap) {
   const $body = $(document.body)
   const $gallery = $('#gallery')
   const $closeButton = $('#close-button')
-  const $thumbnails = $('.thumbnail')
 
   let _currentSnap = null
   let snaps = Object.keys(photoMap).sort()
@@ -23,10 +22,6 @@ window.initGallery = function (photoMap) {
 
   $closeButton.click(function () {
     hideGallery()
-  })
-
-  $thumbnails.click(function () {
-    showGalleryImage($(this).data('number').toString())
   })
 
   $window.swiperight(function () {

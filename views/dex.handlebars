@@ -1,3 +1,10 @@
+<div id="gallery">
+  <img class="gallery-image previous" draggable="false">
+  <img class="gallery-image current" draggable="false">
+  <img class="gallery-image next" draggable="false">
+  <img id="close-button" src="assets/close.png">
+</div>
+
 {{#each generations}}
   <div class="generation {{toLowerCase region}}">
     <div class="region-title">
@@ -8,7 +15,9 @@
       {{#each entries}}
         <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
           {{#if photo}}
-            <img class="thumbnail" src="{{photo.thumbUrl}}" alt="{{photo.title}}" draggable="false" data-number="{{number}}">
+          <a href="#{{number}}">
+            <img src="{{photo.thumbUrl}}" alt="{{photo.title}}" draggable="false" data-number="{{number}}">
+          </a>
           {{else}}
             {{number}}
           {{/if}}
@@ -20,12 +29,6 @@
     </div>
   </div>
 {{/each}}
-<div id="gallery">
-  <img class="gallery-image previous" draggable="false">
-  <img class="gallery-image current" draggable="false">
-  <img class="gallery-image next" draggable="false">
-  <img id="close-button" src="assets/close.png">
-</div>
 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="js/jquery.mobile.custom.min.js"></script>
