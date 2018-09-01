@@ -39,7 +39,12 @@ body {
   h1 {
     margin: 8px 0 0 0;
     font-size: 32px;
-    color: $text-dark;
+    a {
+      &, &:visited, &:active, &:hover, &:focus {
+        color: $text-dark;
+        text-decoration: none;
+      }
+    }
   }
   .trainer-name {
     font-weight: bold;
