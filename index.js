@@ -2,6 +2,7 @@ const exphbs = require('express-handlebars')
 const express = require('express')
 const Flickr = require('flickrapi')
 
+const cache = require('./helpers/cache')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const GENERATIONS = require('./config/generations')
 const UNOBTAINABLE = require('./config/unobtainable')
@@ -28,7 +29,7 @@ app.get('/', (req, res) => {
   }
 })
 
-app.get('/:trainer', async (req, res) => {
+app.get('/:trainer', cache(120), async (req, res) => {
   const { trainer } = req.params
   try {
     const flickr = await getFlickr()

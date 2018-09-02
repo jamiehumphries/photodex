@@ -11,6 +11,7 @@
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "flickrapi": "^0.6.0",
+    "memory-cache": "^0.2.0",
     "node-sass": "^4.9.3"
   },
   "devDependencies": {
