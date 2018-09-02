@@ -28,7 +28,7 @@ const flickrOptions = {
 app.get('/', (req, res) => {
   const { username } = req.query
   if (username) {
-    res.redirect(`/${encodeURIComponent(username)}`)
+    redirectToTrainer(res, username)
   } else {
     res.render('home', { subtitle: "Gotta snap 'em all!" })
   }
@@ -38,20 +38,28 @@ app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
   const { trainer } = req.params
   try {
     const flickr = await getFlickr()
-    const userId = await findUser(flickr, trainer)
-    const photosetId = await findPhotodex(flickr, userId)
+    const { userId, username } = await findUser(flickr, trainer)
+    if (username !== trainer) {
+      redirectToTrainer(res, username)
+      return
+    }
+    const photosetId = await findPhotodexId(flickr, userId)
     const photoset = await getPhotoset(flickr, userId, photosetId)
     const { photoMap, preview } = getPhotoMapAndPreview(photoset.photo)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
-    res.render('dex', { trainer, subtitle, preview, generations, photoMap: JSON.stringify(photoMap) })
+    res.render('dex', { subtitle, username, preview, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainer)
     const subtitle = '404: Not found!'
-    notFound(res, { trainer, subtitle, error: error.message })
+    notFound(res, { subtitle, username: trainer, error: error.message })
   }
 })
+
+function redirectToTrainer (res, trainer) {
+  res.redirect(`/${encodeURIComponent(trainer)}`)
+}
 
 function getFlickr () {
   return new Promise((resolve, reject) => {
@@ -67,7 +75,8 @@ function getFlickr () {
 
 const findUserCache = {}
 function findUser (flickr, username) {
-  const cached = findUserCache[username]
+  const cacheKey = username.toLowerCase()
+  const cached = findUserCache[cacheKey]
   if (cached) {
     return Promise.resolve(cached)
   }
@@ -76,7 +85,9 @@ function findUser (flickr, username) {
       if (error) {
         reject(error)
       } else {
-        resolve(findUserCache[username] = result.user.nsid)
+        const userId = result.user.nsid
+        const username = result.user.username._content
+        resolve(findUserCache[cacheKey] = { userId, username })
       }
     })
   })
@@ -84,8 +95,9 @@ function findUser (flickr, username) {
 
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
 const findPhotodexCache = {}
-function findPhotodex (flickr, userId) {
-  const cached = findPhotodexCache[userId]
+function findPhotodexId (flickr, userId) {
+  const cacheKey = userId
+  const cached = findPhotodexCache[cacheKey]
   if (cached) {
     return Promise.resolve(cached)
   }
@@ -97,7 +109,7 @@ function findPhotodex (flickr, userId) {
         const photosets = result.photosets.photoset
         const photodex = photosets.find(set => PHOTODEX_REGEX.test(set.title._content))
         if (photodex) {
-          resolve(findPhotodexCache[userId] = photodex.id)
+          resolve(findPhotodexCache[cacheKey] = photodex.id)
         } else {
           reject(new Error("No public album found with 'Photódex' in the title"))
         }
