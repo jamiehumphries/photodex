@@ -1,0 +1,16 @@
+.dashboard-view {
+  .visited {
+    display: flex;
+    .trainer-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 10px;
+      img {
+        margin-top: 5px;
+        max-height: 200px;
+        max-width: 200px;
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 const express = require('express')
+const basicAuth = require('express-basic-auth')
 const exphbs = require('express-handlebars')
 const enforce = require('express-sslify')
 const Flickr = require('flickrapi')
@@ -20,18 +21,36 @@ const hbs = exphbs.create({ defaultLayout: 'main', helpers: handlebarsHelpers })
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
 
+const users = {}
+const adminPassword = process.env.ADMIN_PASSWORD
+if (adminPassword) {
+  users['admin'] = adminPassword
+}
+const auth = basicAuth({ users, challenge: true })
+
 const flickrOptions = {
   api_key: process.env.FLICKR_API_KEY,
   progress: false
 }
 
+const recentlyVisited = {}
+
 app.get('/', (req, res) => {
   const { username } = req.query
   if (username) {
-    redirectToTrainer(res, username)
+    res.redirect(getTrainerUrl(username))
   } else {
     res.render('home', { subtitle: "Gotta snap 'em all!" })
   }
+})
+
+app.get('/admin/dashboard', auth, (req, res) => {
+  const subtitle = 'Dashboard'
+  const visited = Object.keys(recentlyVisited).map(trainer => {
+    const preview = recentlyVisited[trainer]
+    return { trainer, preview, url: getTrainerUrl(trainer) }
+  })
+  res.render('dashboard', { subtitle, visited })
 })
 
 app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
@@ -40,15 +59,16 @@ app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
     const flickr = await getFlickr()
     const { userId, username } = await findUser(flickr, trainer)
     if (username !== trainer) {
-      redirectToTrainer(res, username)
+      res.redirect(getTrainerUrl(username))
       return
     }
     const photosetId = await findPhotodexId(flickr, userId)
     const photoset = await getPhotoset(flickr, userId, photosetId)
-    const { photoMap, preview } = getPhotoMapAndPreview(photoset.photo)
+    const { photoMap, preview, previewThumb } = mapPhotos(photoset.photo)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
+    recentlyVisited[trainer] = previewThumb
     res.render('dex', { subtitle, username, preview, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainer)
@@ -57,8 +77,8 @@ app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
   }
 })
 
-function redirectToTrainer (res, trainer) {
-  res.redirect(`/${encodeURIComponent(trainer)}`)
+function getTrainerUrl (trainer) {
+  return `/${encodeURIComponent(trainer)}`
 }
 
 function getFlickr () {
@@ -131,9 +151,9 @@ function getPhotoset (flickr, userId, photosetId) {
   })
 }
 
-function getPhotoMapAndPreview (photos) {
+function mapPhotos (photos) {
   const photoMap = {}
-  let preview = null
+  let preview, previewThumb
   photos.forEach(photo => {
     const title = photo.title
     const match = title.match(/\d{3}/)
@@ -150,9 +170,10 @@ function getPhotoMapAndPreview (photos) {
     }
     if (parseInt(photo.isprimary) === 1) {
       preview = photo.url_l
+      previewThumb = photo.url_m
     }
   })
-  return { photoMap, preview }
+  return { photoMap, preview, previewThumb }
 }
 
 function withDexEntries (generation, photoMap) {

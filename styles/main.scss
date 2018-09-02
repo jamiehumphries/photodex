@@ -3,9 +3,9 @@
 @import './colors';
 @import './forms';
 
+@import './views/dashboard';
 @import './views/dex';
 @import './views/error';
-@import './views/home';
 
 body {
   background-color: $background;
@@ -15,6 +15,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  color: $text-primary;
 
   &.no-scroll {
     position: fixed;
@@ -67,7 +68,24 @@ h1, h2, h3 {
   margin: 120px 0 20px 0;
   flex: 1;
   .container {
-    padding: 0 20px;
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    > * {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h3 {
+      margin-bottom: 20px;
+      &:not(:first-of-type) {
+        margin-top: 30px;
+      }
+    }
+    h3 + div {
+      > p:first-child {
+        margin-top: 0;
+      }
+    }
   }
 }
 
