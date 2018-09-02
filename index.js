@@ -36,6 +36,7 @@ app.get('/:trainer', async (req, res) => {
     const subtitle = `Snapped: ${snapCount}`
     res.render('dex', { trainer, subtitle, preview, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
+    clearCaches(trainer)
     const subtitle = '404: Not found!'
     notFound(res, { trainer, subtitle, error: error.message })
   }
@@ -141,6 +142,14 @@ function padNumber (n) {
     number = '0' + number
   }
   return number
+}
+
+function clearCaches (trainer) {
+  const userId = findUserCache[trainer]
+  delete findUserCache[trainer]
+  if (userId) {
+    delete findPhotodexCache[userId]
+  }
 }
 
 app.use((req, res, next) => {
