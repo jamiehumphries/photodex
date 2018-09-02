@@ -1,6 +1,6 @@
 {
   "editor.tabSize": 2,
   "eslint.enable": true,
-  "eslint.packageManager": "yarn",
+  "eslint.packageManager": "npm",
   "files.insertFinalNewline": true
 }
