@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
   }
 })
 
-app.get('/:trainer', cache(120), async (req, res) => {
+app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
   const { trainer } = req.params
   try {
     const flickr = await getFlickr()
