@@ -1,7 +1,7 @@
 {
   "editor.tabSize": 2,
   "eslint.enable": true,
-  "eslint.packageManager": "npm",
+  "eslint.packageManager": "yarn",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true
 }
