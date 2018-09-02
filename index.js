@@ -126,7 +126,15 @@ function getPhotoMapAndPreview (photos) {
     const title = photo.title
     const match = title.match(/\d{3}/)
     if (match) {
-      photoMap[match[0]] = { title, thumbUrl: photo.url_m, galleryUrl: photo.url_l }
+      const { url_m: thumbUrl, url_l: galleryUrl, height_m: height, width_m: width } = photo
+      const ratio = parseInt(width) / parseInt(height)
+      const isLandscape = ratio > 1
+      const orientation = isLandscape ? 'landscape' : 'portrait'
+      const result = { title, thumbUrl, galleryUrl, orientation }
+      if (isLandscape) {
+        result.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
+      }
+      photoMap[match[0]] = result
     }
     if (parseInt(photo.isprimary) === 1) {
       preview = photo.url_l

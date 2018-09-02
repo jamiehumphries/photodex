@@ -91,14 +91,18 @@
 
     img {
       cursor: pointer;
-      max-width: 100%;
       display: block;
       margin: auto;
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      &.portrait {
+        top: 0;
+        bottom: 0;
+        max-width: 100%;
+      }
+      &.landscape {
+        // Additional CSS is rendered inline to allow centering.
+        max-height: 100%;
+      }
     }
 
     &.unobtainable {
