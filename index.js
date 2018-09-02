@@ -47,8 +47,8 @@ app.get('/', (req, res) => {
 app.get('/admin/dashboard', auth, (req, res) => {
   const subtitle = 'Dashboard'
   const visited = Object.keys(recentlyVisited).map(trainer => {
-    const preview = recentlyVisited[trainer]
-    return { trainer, preview, url: getTrainerUrl(trainer) }
+    const { previewThumbUrl: preview, snapCount } = recentlyVisited[trainer]
+    return { trainer, preview, snapCount, url: getTrainerUrl(trainer) }
   })
   res.render('dashboard', { subtitle, visited })
 })
@@ -73,7 +73,7 @@ app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
       url: 'https://www.photodex.io' + getTrainerUrl(username),
       image: previewUrl
     }
-    recentlyVisited[trainer] = previewThumbUrl
+    recentlyVisited[trainer] = { previewThumbUrl, snapCount }
     res.render('dex', { subtitle, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainer)
