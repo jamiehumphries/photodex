@@ -64,12 +64,17 @@ app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
     }
     const photosetId = await findPhotodexId(flickr, userId)
     const photoset = await getPhotoset(flickr, userId, photosetId)
-    const { photoMap, preview, previewThumb } = mapPhotos(photoset.photo)
+    const { photoMap, previewUrl, previewThumbUrl } = mapPhotos(photoset.photo)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
-    recentlyVisited[trainer] = previewThumb
-    res.render('dex', { subtitle, username, preview, generations, photoMap: JSON.stringify(photoMap) })
+    const og = {
+      title: `${username}'s Photódex`,
+      url: 'https://www.photodex.io' + getTrainerUrl(username),
+      image: previewUrl
+    }
+    recentlyVisited[trainer] = previewThumbUrl
+    res.render('dex', { subtitle, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainer)
     const subtitle = '404: Not found!'
@@ -153,7 +158,7 @@ function getPhotoset (flickr, userId, photosetId) {
 
 function mapPhotos (photos) {
   const photoMap = {}
-  let preview, previewThumb
+  let previewUrl, previewThumbUrl
   photos.forEach(photo => {
     const title = photo.title
     const match = title.match(/\d{3}/)
@@ -169,11 +174,11 @@ function mapPhotos (photos) {
       photoMap[match[0]] = result
     }
     if (parseInt(photo.isprimary) === 1) {
-      preview = photo.url_l
-      previewThumb = photo.url_m
+      previewUrl = photo.url_l
+      previewThumbUrl = photo.url_m
     }
   })
-  return { photoMap, preview, previewThumb }
+  return { photoMap, previewUrl, previewThumbUrl }
 }
 
 function withDexEntries (generation, photoMap) {
