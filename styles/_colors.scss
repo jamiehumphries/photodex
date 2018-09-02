@@ -1,9 +1,10 @@
-$background-main: #DEDEFF;
-$background-banner: #EBEBFF;
+$background: #DEDEFF;
+$background-light: #EBEBFF;
 
-$border-banner: #C1C1FF;
+$border: #C1C1FF;
+$border-focus: darken($border, 10%);
 
-$text-dark: #57446C;
+$text-primary: #57446C;
 $text-light: #B6A9DE;
 $text-white: #F0F0FF;
 $text-error: #DC143C;

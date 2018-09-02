@@ -20,7 +20,12 @@ const flickrOptions = {
 }
 
 app.get('/', (req, res) => {
-  res.render('home', { subtitle: "Gotta snap 'em all!" })
+  const { username } = req.query
+  if (username) {
+    res.redirect(`/${encodeURIComponent(username)}`)
+  } else {
+    res.render('home', { subtitle: "Gotta snap 'em all!" })
+  }
 })
 
 app.get('/:trainer', async (req, res) => {

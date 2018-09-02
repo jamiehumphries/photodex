@@ -1,0 +1,50 @@
+form {
+  input {
+    &:not([type]),
+     &[type="text"],
+     &[type="email"],
+     &[type="password"] {
+      box-shadow: none;
+
+      background-color: $background-light;
+
+      box-sizing: border-box;
+      padding: 10px;
+      margin: 2px 0;
+
+      border: solid 1px $border;
+      border-radius: 6px;
+      transition: border 0.3s;
+
+      &:focus {
+        outline: none;
+        border: solid 1px $border-focus;
+      }
+    }
+  }
+
+  button {
+    background-color: $background-light;
+    color: $text-primary;
+    cursor: pointer;
+
+    text-transform: uppercase;
+    font-weight: bold;
+
+    padding: 10px 20px;
+    margin: 10px 0;
+
+    border: solid 2px $border;
+    border-radius: 6px;
+    transition: border 0.3s;
+
+    &:hover, &:active, &:focus {
+      outline: none;
+      border: solid 2px $border-focus;
+    }
+
+    &:active {
+      background-color: darken($background, 2%);
+    }
+  }
+}

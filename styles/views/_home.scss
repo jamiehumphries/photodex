@@ -1,0 +1,22 @@
+.home-view {
+  .container {
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    > * {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h3 {
+      margin: 20px auto;
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+    h3 + div {
+      > p:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}

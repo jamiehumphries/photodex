@@ -2,5 +2,6 @@
   "editor.tabSize": 2,
   "eslint.enable": true,
   "eslint.packageManager": "npm",
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true
 }
