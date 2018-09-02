@@ -1,5 +1,6 @@
-const exphbs = require('express-handlebars')
 const express = require('express')
+const exphbs = require('express-handlebars')
+const enforce = require('express-sslify')
 const Flickr = require('flickrapi')
 
 const cache = require('./helpers/cache')
@@ -10,6 +11,10 @@ const UNOBTAINABLE = require('./config/unobtainable')
 const app = express()
 
 app.use(express.static('public'))
+
+if (process.env.ENFORCE_HTTPS === 'yes') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }))
+}
 
 const hbs = exphbs.create({ defaultLayout: 'main', helpers: handlebarsHelpers })
 app.engine('handlebars', hbs.engine)
