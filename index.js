@@ -3,6 +3,7 @@ const basicAuth = require('express-basic-auth')
 const exphbs = require('express-handlebars')
 const enforce = require('express-sslify')
 const Flickr = require('flickrapi')
+const mcache = require('memory-cache')
 
 const cache = require('./helpers/cache')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
@@ -53,7 +54,7 @@ app.get('/admin/dashboard', auth, (req, res) => {
   res.render('dashboard', { subtitle, visited })
 })
 
-app.get('/:trainer', cache(process.env.CACHE_SECONDS), async (req, res) => {
+app.get('/:trainer', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { trainer } = req.params
   try {
     const flickr = await getFlickr()
@@ -98,10 +99,9 @@ function getFlickr () {
   })
 }
 
-const findUserCache = {}
 function findUser (flickr, username) {
-  const cacheKey = username.toLowerCase()
-  const cached = findUserCache[cacheKey]
+  const cacheKey = getFindUserCacheKey(username)
+  const cached = mcache.get(cacheKey)
   if (cached) {
     return Promise.resolve(cached)
   }
@@ -112,17 +112,23 @@ function findUser (flickr, username) {
       } else {
         const userId = result.user.nsid
         const username = result.user.username._content
-        resolve(findUserCache[cacheKey] = { userId, username })
+        const user = { userId, username }
+        const cacheSeconds = parseInt(process.env.FIND_USER_CACHE_SECONDS)
+        mcache.put(cacheKey, user, cacheSeconds * 1000)
+        resolve(user)
       }
     })
   })
 }
 
+function getFindUserCacheKey (username) {
+  return `findUser__${username.toLowerCase()}`
+}
+
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
-const findPhotodexCache = {}
 function findPhotodexId (flickr, userId) {
-  const cacheKey = userId
-  const cached = findPhotodexCache[cacheKey]
+  const cacheKey = getFindPhotodexIdCacheKey(userId)
+  const cached = mcache.get(cacheKey)
   if (cached) {
     return Promise.resolve(cached)
   }
@@ -132,15 +138,22 @@ function findPhotodexId (flickr, userId) {
         reject(error)
       } else {
         const photosets = result.photosets.photoset
-        const photodex = photosets.find(set => PHOTODEX_REGEX.test(set.title._content))
+        const photodex = photosets.find(photoset => PHOTODEX_REGEX.test(photoset.title._content))
         if (photodex) {
-          resolve(findPhotodexCache[cacheKey] = photodex.id)
+          const id = photodex.id
+          const cacheSeconds = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS)
+          mcache.put(cacheKey, id, cacheSeconds * 1000)
+          resolve(id)
         } else {
           reject(new Error("No public album found with 'Photódex' in the title"))
         }
       }
     })
   })
+}
+
+function getFindPhotodexIdCacheKey (userId) {
+  return `findPhotodexId__${userId}`
 }
 
 function getPhotoset (flickr, userId, photosetId) {
@@ -201,11 +214,13 @@ function padNumber (n) {
   return number
 }
 
-function clearCaches (trainer) {
-  const userId = findUserCache[trainer]
-  delete findUserCache[trainer]
+function clearCaches (username) {
+  const findUserCacheKey = getFindUserCacheKey(username)
+  const { userId } = mcache.get(findUserCacheKey)
+  mcache.del(findUserCacheKey)
   if (userId) {
-    delete findPhotodexCache[userId]
+    const findPhotodexIdCacheKey = getFindPhotodexIdCacheKey(userId)
+    mcache.del(findPhotodexIdCacheKey)
   }
 }
 
