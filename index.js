@@ -62,7 +62,7 @@ app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), asyn
       res.redirect(getTrainerUrl(username))
       return
     }
-    const { photoMap, previewUrl } = await getPhotos(flickr, userId)
+    const { photosetId, photoMap, previewUrl } = await getPhotos(flickr, userId)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
@@ -72,7 +72,7 @@ app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), asyn
       image: previewUrl
     }
     recentlyVisited.push(username)
-    res.render('dex', { subtitle, username, og, generations, photoMap: JSON.stringify(photoMap) })
+    res.render('dex', { subtitle, userId, photosetId, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainerName)
     const subtitle = '404: Not found!'
@@ -135,7 +135,7 @@ function getFindUserCacheKey (username) {
 async function getPhotos (flickr, userId) {
   const photosetId = await findPhotodexId(flickr, userId)
   const photoset = await getPhotoset(flickr, userId, photosetId)
-  return mapPhotos(photoset.photo)
+  return { photosetId, ...mapPhotos(photoset.photo) }
 }
 
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')

@@ -5,6 +5,14 @@
     justify-content: center;
   }
 
+  .flickr-link {
+    display: flex;
+    a {
+      margin: auto;
+      color: $text-light;
+    }
+  }
+
   .region-title {
     color: $text-white;
     margin: 20px 0;
