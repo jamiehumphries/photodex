@@ -1,11 +1,4 @@
 <div class="container">
   <h3>Recently visited</h3>
-  <div class="visited">
-    {{#each visited}}
-      <a href="{{url}}" class="trainer-card">
-        {{trainer}} ({{snapCount}})
-        <img src="{{preview}}" alt="{{trainer}}">
-      </a>
-    {{/each}}
-  </div>
+  {{> trainerCards list=visited}}
 </div>

@@ -1,0 +1,10 @@
+  <div class="trainer-card-list">
+    {{#each list}}
+      <a href="{{url}}" class="trainer-card">
+        {{username}} ({{snapCount}})
+        <img src="{{preview}}" alt="{{username}}">
+      </a>
+    {{else}}
+      None!
+    {{/each}}
+  </div>

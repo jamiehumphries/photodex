@@ -34,38 +34,35 @@ const flickrOptions = {
   progress: false
 }
 
-const recentlyVisited = {}
+const recentlyVisited = []
 
-app.get('/', (req, res) => {
+app.get('/', cache(process.env.HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { username } = req.query
   if (username) {
     res.redirect(getTrainerUrl(username))
   } else {
-    res.render('home', { subtitle: "Gotta snap 'em all!" })
+    const exampleUsernames = process.env.EXAMPLES.split(',')
+    const examples = await getTrainerCards(exampleUsernames)
+    res.render('home', { subtitle: "Gotta snap 'em all!", examples })
   }
 })
 
-app.get('/admin/dashboard', auth, (req, res) => {
+app.get('/admin/dashboard', auth, async (req, res) => {
   const subtitle = 'Dashboard'
-  const visited = Object.keys(recentlyVisited).map(trainer => {
-    const { previewThumbUrl: preview, snapCount } = recentlyVisited[trainer]
-    return { trainer, preview, snapCount, url: getTrainerUrl(trainer) }
-  })
+  const visited = await getTrainerCards(recentlyVisited)
   res.render('dashboard', { subtitle, visited })
 })
 
-app.get('/:trainer', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
-  const { trainer } = req.params
+app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
+  let { trainerName } = req.params
   try {
     const flickr = await getFlickr()
-    const { userId, username } = await findUser(flickr, trainer)
-    if (username !== trainer) {
+    const { userId, username } = await findUser(flickr, trainerName)
+    if (username !== trainerName) {
       res.redirect(getTrainerUrl(username))
       return
     }
-    const photosetId = await findPhotodexId(flickr, userId)
-    const photoset = await getPhotoset(flickr, userId, photosetId)
-    const { photoMap, previewUrl, previewThumbUrl } = mapPhotos(photoset.photo)
+    const { photoMap, previewUrl } = await getPhotos(flickr, userId)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
@@ -74,17 +71,27 @@ app.get('/:trainer', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), async (r
       url: 'https://www.photodex.io' + getTrainerUrl(username),
       image: previewUrl
     }
-    recentlyVisited[trainer] = { previewThumbUrl, snapCount }
+    recentlyVisited.push(username)
     res.render('dex', { subtitle, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
-    clearCaches(trainer)
+    clearCaches(trainerName)
     const subtitle = '404: Not found!'
-    notFound(res, { subtitle, username: trainer, error: error.message })
+    notFound(res, { subtitle, username: trainerName, error: error.message })
   }
 })
 
-function getTrainerUrl (trainer) {
-  return `/${encodeURIComponent(trainer)}`
+function getTrainerUrl (username) {
+  return `/${encodeURIComponent(username)}`
+}
+
+function getTrainerCards (usernames) {
+  return Promise.all(usernames.map(async username => {
+    const flickr = await getFlickr()
+    const { userId } = await findUser(flickr, username)
+    const { photoMap, previewThumbUrl: preview } = await getPhotos(flickr, userId)
+    const snapCount = Object.keys(photoMap).length
+    return { username, preview, snapCount, url: getTrainerUrl(username) }
+  }))
 }
 
 function getFlickr () {
@@ -123,6 +130,12 @@ function findUser (flickr, username) {
 
 function getFindUserCacheKey (username) {
   return `findUser__${username.toLowerCase()}`
+}
+
+async function getPhotos (flickr, userId) {
+  const photosetId = await findPhotodexId(flickr, userId)
+  const photoset = await getPhotoset(flickr, userId, photosetId)
+  return mapPhotos(photoset.photo)
 }
 
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
@@ -194,6 +207,10 @@ function mapPhotos (photos) {
       previewThumbUrl = photo.url_m
     }
   })
+  if (photos.length > 0 && (!previewUrl || !previewThumbUrl)) {
+    previewUrl = photos[0].url_l
+    previewThumbUrl = photos[0].url_m
+  }
   return { photoMap, previewUrl, previewThumbUrl }
 }
 

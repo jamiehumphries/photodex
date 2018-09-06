@@ -6,6 +6,9 @@
   </form>
   <small>(e.g. "JTAtomico")</small>
 
+  <h3>Examples</h3>
+  {{>trainerCards list=examples}}
+
   <h3>Create your own Photódex</h3>
   <div>
     <p>Photódex is powered by Flickr's API. To create your own Photódex you must first create a Flickr album.</p>
@@ -15,7 +18,7 @@
         Create an account on <a href="https://www.flickr.com/" target="_blank">Flickr</a>.
       </li>
       <li>
-        Create an album with the word "Photódex" in the title (or just "Photodex" without the accent).
+        Create an album with the word <strong>"Photódex" in the title</strong> (or just "Photodex" without the accent).
       </li>
       <li>Upload your AR snaps to the album, with the following conditions:
         <ul>
@@ -40,6 +43,31 @@
       As an example, <a href="https://www.flickr.com/photos/142094589@N06/sets/72157697425407712" target="_blank">this Flickr album</a>
       is behind <a href="/JTAtomico" target="_blank">this Photódex</a>.
     </p>
+    <h4>Advanced</h4>
+    <p>
+      By default, the photo thumbnail square is taken from the center of the image.
+      To change this, you can add some positional data to your photo title.
+    </p>
+    <ul>
+      <li>
+        For portait photos:
+        <ul>
+          <li><strong>position=top</strong> aligns the thumbnail to the top of the photo.</li>
+          <li><strong>position=bottom</strong> aligns the thumbnail to the bottom of the photo.</li>
+          <li>Thumbnail defaults to center if no position is given.</li>
+        </ul>
+      </li>
+      <li>
+        For landscape photos:
+        <ul>
+          <li><strong>position=left</strong> aligns the thumbnail to the left of the photo.</li>
+          <li><strong>position=right</strong> aligns the thumbnail to the right of the photo.</li>
+          <li>Thumbnail defaults to center if no position is given.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>For example, "025 Pikachu (position=left)" would work as a title if your Pikachu is standing on the left side of a landscape photo.</p>
+    <p>Positional instructions must be lower case and must not have spaces around the equals sign.</p>
     <h4>Troubleshooting</h4>
     <p>
       If you are having issues getting your Photódex to appear after following the steps above, please ensure that:

@@ -3,9 +3,9 @@
 @import './colors';
 @import './forms';
 
-@import './views/dashboard';
 @import './views/dex';
 @import './views/error';
+@import './views/partials/trainerCards.scss';
 
 body {
   background-color: $background;

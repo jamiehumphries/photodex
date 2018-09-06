@@ -1,0 +1,16 @@
+.trainer-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .trainer-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    img {
+      margin-top: 5px;
+      max-height: 200px;
+      max-width: 200px;
+    }
+  }
+}
