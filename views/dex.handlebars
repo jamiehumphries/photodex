@@ -17,7 +17,7 @@
           {{#if photo}}
             <a href="#{{number}}">
               {{#with photo}}
-                <img src="{{thumbUrl}}" alt="{{title}}" class="{{orientation}}" style="{{thumbCss}}" draggable="false">
+                <img src="{{thumbUrl}}" alt="{{title}}" class="{{orientation}} {{position}}" style="{{thumbCss}}" draggable="false">
               {{/with}}
             </a>
           {{else}}

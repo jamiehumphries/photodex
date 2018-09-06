@@ -181,7 +181,10 @@ function mapPhotos (photos) {
       const isLandscape = ratio > 1
       const orientation = isLandscape ? 'landscape' : 'portrait'
       const result = { title, thumbUrl, galleryUrl, orientation }
-      if (isLandscape) {
+      const positionMatch = title.match(/position=(top|right|left|bottom)/)
+      if (positionMatch) {
+        result.position = positionMatch[1]
+      } else if (isLandscape) {
         result.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
       }
       photoMap[match[0]] = result

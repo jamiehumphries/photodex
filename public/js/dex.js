@@ -1,5 +1,6 @@
 /* globals $, history, location */
 
+// @ts-ignore
 window.initGallery = function (photoMap) {
   const $window = $(window)
   const $body = $(document.body)
@@ -24,6 +25,7 @@ window.initGallery = function (photoMap) {
     hideGallery()
   })
 
+  // @ts-ignore
   $window.swiperight(function () {
     slideToPreviousSnap()
   }).swipeleft(function () {
@@ -61,6 +63,7 @@ window.initGallery = function (photoMap) {
     }
   })
 
+  // @ts-ignore
   // Trigger initial gallery image display.
   $window.hashchange()
 
@@ -181,6 +184,7 @@ window.initGallery = function (photoMap) {
       return
     }
     history.replaceState(null, null, location.pathname)
+    // @ts-ignore
     $window.hashchange()
   }
 }

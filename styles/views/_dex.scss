@@ -95,12 +95,22 @@
       margin: auto;
       position: absolute;
       &.portrait {
-        top: 0;
-        bottom: 0;
+        &:not(.bottom) {
+          top: 0;
+        }
+        &:not(.top) {
+          bottom: 0;
+        }
         max-width: 100%;
       }
       &.landscape {
         // Additional CSS is rendered inline to allow centering.
+        &.left {
+          left: 0;
+        }
+        &.right {
+          right: 0;
+        }
         max-height: 100%;
       }
     }
