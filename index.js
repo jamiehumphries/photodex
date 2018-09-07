@@ -36,12 +36,12 @@ const flickrOptions = {
 
 let recentlyVisited = []
 
-app.get('/', cache(process.env.HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
+app.get('/', cache(parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
   const { username } = req.query
   if (username) {
     res.redirect(getTrainerUrl(username))
   } else {
-    const exampleUsernames = process.env.EXAMPLES.split(',')
+    const exampleUsernames = (process.env.EXAMPLES || '').split(',')
     const examples = await getTrainerCards(exampleUsernames)
     res.render('home', { subtitle: "Gotta snap 'em all!", examples })
   }
@@ -53,7 +53,7 @@ app.get('/admin/dashboard', auth, async (req, res) => {
   res.render('dashboard', { subtitle, visited })
 })
 
-app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
+app.get('/:trainerName', cache(parseInt(process.env.TRAINER_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
   let { trainerName } = req.params
   try {
     const flickr = await getFlickr()
@@ -125,7 +125,7 @@ function findUser (flickr, username) {
         const userId = result.user.nsid
         const username = result.user.username._content
         const user = { userId, username }
-        const cacheSeconds = parseInt(process.env.FIND_USER_CACHE_SECONDS)
+        const cacheSeconds = parseInt(process.env.FIND_USER_CACHE_SECONDS) || 1
         mcache.put(cacheKey, user, cacheSeconds * 1000)
         resolve(user)
       }
@@ -159,7 +159,7 @@ function findPhotodexId (flickr, userId) {
         const photodex = photosets.find(photoset => PHOTODEX_REGEX.test(photoset.title._content))
         if (photodex) {
           const id = photodex.id
-          const cacheSeconds = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS)
+          const cacheSeconds = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS) || 1
           mcache.put(cacheKey, id, cacheSeconds * 1000)
           resolve(id)
         } else {
