@@ -34,7 +34,7 @@ const flickrOptions = {
   progress: false
 }
 
-const recentlyVisited = []
+let recentlyVisited = []
 
 app.get('/', cache(process.env.HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { username } = req.query
@@ -71,7 +71,7 @@ app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), asyn
       url: 'https://www.photodex.io' + getTrainerUrl(username),
       image: previewUrl
     }
-    recentlyVisited.push(username)
+    updateRecentlyVisited(username)
     res.render('dex', { subtitle, userId, photosetId, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(trainerName)
@@ -82,6 +82,11 @@ app.get('/:trainerName', cache(process.env.TRAINER_RESPONSE_CACHE_SECONDS), asyn
 
 function getTrainerUrl (username) {
   return `/${encodeURIComponent(username)}`
+}
+
+function updateRecentlyVisited (username) {
+  recentlyVisited = recentlyVisited.filter(name => name !== username)
+  recentlyVisited.unshift(username)
 }
 
 function getTrainerCards (usernames) {
