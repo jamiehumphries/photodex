@@ -199,7 +199,7 @@ function mapPhotos (photos) {
       const isLandscape = ratio > 1
       const orientation = isLandscape ? 'landscape' : 'portrait'
       const result = { title, thumbUrl, galleryUrl: galleryUrl || thumbUrl, orientation }
-      const positionMatch = title.match(/position=(top|right|left|bottom)/)
+      const positionMatch = title.match(/position=(top|bottom|left|right)/)
       if (positionMatch) {
         result.position = positionMatch[1]
       } else if (isLandscape) {
