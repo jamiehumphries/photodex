@@ -198,7 +198,7 @@ function mapPhotos (photos) {
       const ratio = parseInt(width) / parseInt(height)
       const isLandscape = ratio > 1
       const orientation = isLandscape ? 'landscape' : 'portrait'
-      const result = { title, thumbUrl, galleryUrl, orientation }
+      const result = { title, thumbUrl, galleryUrl: galleryUrl || thumbUrl, orientation }
       const positionMatch = title.match(/position=(top|right|left|bottom)/)
       if (positionMatch) {
         result.position = positionMatch[1]
