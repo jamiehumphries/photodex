@@ -241,10 +241,10 @@ function padNumber (n) {
 
 function clearCaches (username) {
   const findUserCacheKey = getFindUserCacheKey(username)
-  const { userId } = mcache.get(findUserCacheKey)
+  const user = mcache.get(findUserCacheKey)
   mcache.del(findUserCacheKey)
-  if (userId) {
-    const findPhotodexIdCacheKey = getFindPhotodexIdCacheKey(userId)
+  if (user) {
+    const findPhotodexIdCacheKey = getFindPhotodexIdCacheKey(user.userId)
     mcache.del(findPhotodexIdCacheKey)
   }
 }
