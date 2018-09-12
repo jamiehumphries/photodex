@@ -34,7 +34,7 @@ const flickrOptions = {
   progress: false
 }
 
-let recentlyVisited = []
+const recentlyVisited = new Set()
 
 app.get('/', cache(parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
   const { username } = req.query
@@ -49,7 +49,7 @@ app.get('/', cache(parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1), asyn
 
 app.get('/admin/dashboard', auth, async (req, res) => {
   const subtitle = 'Dashboard'
-  const visited = await getTrainerCards(recentlyVisited)
+  const visited = await getTrainerCards(Array.from(recentlyVisited))
   res.render('dashboard', { subtitle, visited })
 })
 
@@ -85,8 +85,7 @@ function getTrainerUrl (username) {
 }
 
 function updateRecentlyVisited (username) {
-  recentlyVisited = recentlyVisited.filter(name => name !== username)
-  recentlyVisited.unshift(username)
+  recentlyVisited.add(username)
 }
 
 function getTrainerCards (usernames) {
