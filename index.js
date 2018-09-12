@@ -35,6 +35,7 @@ const flickrOptions = {
 }
 
 const recentlyVisited = new Set()
+let _flickr = null
 
 app.get('/', cache(parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
   const { username } = req.query
@@ -99,11 +100,15 @@ function getTrainerCards (usernames) {
 }
 
 function getFlickr () {
+  if (_flickr) {
+    return Promise.resolve(_flickr)
+  }
   return new Promise((resolve, reject) => {
     Flickr.tokenOnly(flickrOptions, (error, flickr) => {
       if (error) {
         reject(error)
       } else {
+        _flickr = flickr
         resolve(flickr)
       }
     })
