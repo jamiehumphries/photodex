@@ -8,6 +8,7 @@ window.initGallery = function (photoMap) {
   const $closeButton = $('#close-button')
 
   let _currentSnap = null
+  let _currentForm = 0
   let snaps = Object.keys(photoMap).sort()
 
   const keysDown = {}
@@ -15,10 +16,11 @@ window.initGallery = function (photoMap) {
   let scrollDisabled = false
 
   $gallery.click(function (e) {
-    if (e.target !== this) {
-      return
+    if (e.target === this) {
+      hideGallery()
+    } else {
+      showNextForm()
     }
-    hideGallery()
   })
 
   $closeButton.click(function () {
@@ -42,8 +44,14 @@ window.initGallery = function (photoMap) {
       case 37: // left arrow
         slideToPreviousSnap()
         break
+      case 38: // up arrow
+        showPreviousForm()
+        break
       case 39: // right arrow
         slideToNextSnap()
+        break
+      case 40: // down arrow
+        showNextForm()
         break
       case 27: // escape
         hideGallery()
@@ -125,6 +133,25 @@ window.initGallery = function (photoMap) {
     setGalleryImage('next', getNextSnap())
   }
 
+  function showPreviousForm () {
+    changeForm(-1)
+  }
+
+  function showNextForm () {
+    changeForm(+1)
+  }
+
+  function changeForm (offset) {
+    setGalleryImage('current', _currentSnap, _currentForm + offset)
+    onFormChange()
+  }
+
+  function onFormChange () {
+    const $current = $('.current')
+    $current.addClass('form-change')
+    setTimeout(() => $current.removeClass('form-change'), 100)
+  }
+
   function galleryActive () {
     return $gallery.hasClass('active')
   }
@@ -148,11 +175,19 @@ window.initGallery = function (photoMap) {
     }
   }
 
-  function setGalleryImage (position, number) {
+  function setGalleryImage (position, number, form) {
     if (number === undefined) {
       return
     }
-    $('.' + position + '.gallery-image').attr('src', photoMap[number].galleryUrl)
+    const forms = photoMap[number]
+    const $galleryImage = $('.' + position + '.gallery-image')
+    _currentForm = form ? (form + forms.length) % forms.length : 0
+    $galleryImage.attr('src', forms[_currentForm].galleryUrl)
+    if (forms.length > 1) {
+      $galleryImage.addClass('multiform')
+    } else {
+      $galleryImage.removeClass('multiform')
+    }
   }
 
   function disableScroll () {

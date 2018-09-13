@@ -198,18 +198,20 @@ function mapPhotos (photos) {
     const title = photo.title
     const match = title.match(/\d{3}/)
     if (match) {
+      const number = match[0]
       const { url_m: thumbUrl, url_l: galleryUrl, height_m: height, width_m: width } = photo
       const ratio = parseInt(width) / parseInt(height)
       const isLandscape = ratio > 1
       const orientation = isLandscape ? 'landscape' : 'portrait'
-      const result = { title, thumbUrl, galleryUrl: galleryUrl || thumbUrl, orientation }
+      const entry = { title, thumbUrl, galleryUrl: galleryUrl || thumbUrl, orientation }
       const positionMatch = title.match(/position=(top|bottom|left|right)/)
       if (positionMatch) {
-        result.position = positionMatch[1]
+        entry.position = positionMatch[1]
       } else if (isLandscape) {
-        result.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
+        entry.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
       }
-      photoMap[match[0]] = result
+      photoMap[number] = photoMap[number] || []
+      photoMap[number].push(entry)
     }
     if (parseInt(photo.isprimary) === 1) {
       previewUrl = photo.url_l
@@ -229,8 +231,8 @@ function withDexEntries (generation, photoMap) {
   for (let i = start; i <= end; i++) {
     const number = padNumber(i)
     const unobtainable = UNOBTAINABLE.indexOf(i) !== -1
-    const photo = photoMap[number]
-    entries.push({ number, unobtainable, photo })
+    const photos = photoMap[number]
+    entries.push({ number, unobtainable, photos })
   }
   return { region, entries }
 }

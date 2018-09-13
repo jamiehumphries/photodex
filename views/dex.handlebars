@@ -18,9 +18,9 @@
     <div class="entries">
       {{#each entries}}
         <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
-          {{#if photo}}
+          {{#if photos}}
             <a href="#{{number}}">
-              {{#with photo}}
+              {{#with photos.[0]}}
                 <img src="{{thumbUrl}}" alt="{{title}}" class="{{orientation}} {{position}}" style="{{thumbCss}}" draggable="false">
               {{/with}}
             </a>
