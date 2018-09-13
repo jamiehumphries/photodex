@@ -1,5 +1,14 @@
 /* globals $, history, location */
 
+const ACTIVE = 'active'
+const NO_SCROLL = 'no-scroll'
+const GALLERY_IMAGE = 'gallery-image'
+const PREVIOUS = 'previous'
+const CURRENT = 'current'
+const NEXT = 'next'
+const MULTIFORM = 'multiform'
+const FORM_CHANGING = 'form-changing'
+
 // @ts-ignore
 window.initGallery = function (photoMap) {
   const $window = $(window)
@@ -41,19 +50,19 @@ window.initGallery = function (photoMap) {
     }
     keysDown[e.keyCode] = true
     switch (e.keyCode) {
-      case 37: // left arrow
+      case 37: // Left arrow.
         slideToPreviousSnap()
         break
-      case 38: // up arrow
+      case 38: // Up arrow.
         showPreviousForm()
         break
-      case 39: // right arrow
+      case 39: // Right arrow.
         slideToNextSnap()
         break
-      case 40: // down arrow
+      case 40: // Down arrow.
         showNextForm()
         break
-      case 27: // escape
+      case 27: // Escape.
         hideGallery()
         break
     }
@@ -77,61 +86,48 @@ window.initGallery = function (photoMap) {
 
   function showGalleryImage (number) {
     setCurrentSnap(number)
-    setGalleryImage('current', _currentSnap)
-    setGalleryImage('previous', getPreviousSnap())
-    setGalleryImage('next', getNextSnap())
+    setGalleryImage(CURRENT, _currentSnap)
+    setGalleryImage(PREVIOUS, getPreviousSnap())
+    setGalleryImage(NEXT, getNextSnap())
     disableScroll()
-    $gallery.addClass('active')
+    $gallery.addClass(ACTIVE)
   }
 
   function hideGallery () {
     setCurrentSnap(null)
-    $('.gallery-image').attr('src', '')
+    $(`.${GALLERY_IMAGE}`).attr('src', '')
     enableScroll()
-    $gallery.removeClass('active')
+    $gallery.removeClass(ACTIVE)
     currentFormMap = {}
   }
 
   function slideToPreviousSnap () {
-    if (!galleryActive()) {
-      return
-    }
-    const previousSnap = getPreviousSnap()
-    if (!previousSnap) {
-      const current = $('.current')
-      current.removeClass('current').addClass('next')
-      setTimeout(function () {
-        current.removeClass('next').addClass('current')
-      }, 100)
-      return
-    }
-    setCurrentSnap(previousSnap)
-    $('.next').remove()
-    $('.current').removeClass('current').addClass('next')
-    $('.previous').removeClass('previous').addClass('current')
-    $('<img class="gallery-image previous" draggable="false">').prependTo($gallery)
-    setGalleryImage('previous', getPreviousSnap())
+    slide(PREVIOUS, NEXT, getPreviousSnap)
   }
 
   function slideToNextSnap () {
+    slide(NEXT, PREVIOUS, getNextSnap)
+  }
+
+  function slide (towards, awayFrom, getSnapInDirection) {
     if (!galleryActive()) {
       return
     }
-    const nextSnap = getNextSnap()
-    if (!nextSnap) {
-      const current = $('.current')
-      current.removeClass('current').addClass('previous')
+    const snap = getSnapInDirection()
+    if (!snap) {
+      const current = $(`.${CURRENT}`)
+      current.removeClass(CURRENT).addClass(awayFrom)
       setTimeout(function () {
-        current.removeClass('previous').addClass('current')
+        current.removeClass(awayFrom).addClass(CURRENT)
       }, 100)
       return
     }
-    setCurrentSnap(nextSnap)
-    $('.previous').remove()
-    $('.current').removeClass('current').addClass('previous')
-    $('.next').removeClass('next').addClass('current')
-    $('<img class="gallery-image next" draggable="false">').prependTo($gallery)
-    setGalleryImage('next', getNextSnap())
+    setCurrentSnap(snap)
+    $(`.${awayFrom}`).remove()
+    $(`.${CURRENT}`).removeClass(CURRENT).addClass(awayFrom)
+    $(`.${towards}`).removeClass(towards).addClass(CURRENT)
+    $(`<img class="${GALLERY_IMAGE} ${towards}" draggable="false">`).prependTo($gallery)
+    setGalleryImage(towards, getSnapInDirection())
   }
 
   function showPreviousForm () {
@@ -144,18 +140,14 @@ window.initGallery = function (photoMap) {
 
   function changeForm (offset) {
     const currentForm = currentFormMap[_currentSnap] || 0
-    setGalleryImage('current', _currentSnap, currentForm + offset)
-    onFormChange()
-  }
-
-  function onFormChange () {
-    const $current = $('.current')
-    $current.addClass('form-change')
-    setTimeout(() => $current.removeClass('form-change'), 100)
+    setGalleryImage(CURRENT, _currentSnap, currentForm + offset)
+    const $current = $(`.${CURRENT}`)
+    $current.addClass(FORM_CHANGING)
+    setTimeout(() => $current.removeClass(FORM_CHANGING), 100)
   }
 
   function galleryActive () {
-    return $gallery.hasClass('active')
+    return $gallery.hasClass(ACTIVE)
   }
 
   function getPreviousSnap () {
@@ -171,7 +163,7 @@ window.initGallery = function (photoMap) {
   function setCurrentSnap (snap) {
     _currentSnap = snap
     if (snap) {
-      history.replaceState(null, null, '#' + snap)
+      history.replaceState(null, null, `#${snap}`)
     } else {
       clearHash()
     }
@@ -182,13 +174,13 @@ window.initGallery = function (photoMap) {
       return
     }
     const forms = photoMap[number]
-    const $galleryImage = $('.' + position + '.gallery-image')
+    const $galleryImage = $(`.${position}.${GALLERY_IMAGE}`)
     currentFormMap[number] = form !== undefined ? (form + forms.length) % forms.length : (currentFormMap[number] || 0)
     $galleryImage.attr('src', forms[currentFormMap[number]].galleryUrl)
     if (forms.length > 1) {
-      $galleryImage.addClass('multiform')
+      $galleryImage.addClass(MULTIFORM)
     } else {
-      $galleryImage.removeClass('multiform')
+      $galleryImage.removeClass(MULTIFORM)
     }
   }
 
@@ -197,7 +189,7 @@ window.initGallery = function (photoMap) {
       return
     }
     scrollTop = $window.scrollTop()
-    $body.addClass('no-scroll').css({
+    $body.addClass(NO_SCROLL).css({
       top: -scrollTop
     })
     scrollDisabled = true
@@ -207,7 +199,7 @@ window.initGallery = function (photoMap) {
     if (!scrollDisabled) {
       return
     }
-    $body.removeClass('no-scroll')
+    $body.removeClass(NO_SCROLL)
     $window.scrollTop(scrollTop)
     scrollDisabled = false
   }

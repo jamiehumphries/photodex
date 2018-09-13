@@ -174,7 +174,7 @@
     &.multiform {
       box-shadow: 5px 5px 0 $multiform-shadow, 10px 10px 0 darken($multiform-shadow, 10%), 5px 5px 40px $gallery-shadow;
       transition: box-shadow 0.05s, left 0.5s;
-      &.form-change {
+      &.form-changing {
         box-shadow: 5px 5px 0 $multiform-shadow, 10px 10px 0 darken($multiform-shadow, 10%), 5px 5px 50px $gallery-shadow;
       }
     }
