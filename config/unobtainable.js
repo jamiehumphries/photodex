@@ -1,17 +1,46 @@
 module.exports = Object.freeze([
-  // Unreleased Mythical
-  385, 386,
-  // Babies
-  172, 173, 174, 175, 236, 238, 239, 240, 298, 360,
-  // Evolution items
-  182, 186, 192, 199, 208, 212, 230, 233,
-  // Eeveelotuions
-  196, 197,
-  // Unreleased Johto
-  235,
-  // Hoenn withheld evolutions
-  254, 257, 260, 266, 267, 268, 269, 295, 308, 321,
-  330, 334, 350, 373,
-  // Unreleased Hoenn
-  290, 291, 292, 327, 352, 366, 367, 368
+  172, // Pichu
+  173, // Cleffa
+  174, // Igglybuff
+  175, // Togepi
+  182, // Bellossom
+  186, // Politoed
+  192, // Sunflora
+  196, // Espeon
+  197, // Umbreon
+  199, // Slowking
+  208, // Steelix
+  212, // Scizor
+  230, // Kingdra
+  233, // Porygon2
+  235, // Smeargle
+  236, // Tyrogue
+  238, // Smoochum
+  239, // Elekid
+  240, // Magby
+  254, // Sceptile
+  257, // Blaziken
+  260, // Marshtomp
+  266, // Silcoon
+  267, // Beautifly
+  268, // Cascoon
+  269, // Dustox
+  290, // Nincada
+  291, // Ninjask
+  292, // Shedinja
+  295, // Exploud
+  298, // Azurill
+  308, // Medicham
+  321, // Wailord
+  330, // Flygon
+  334, // Altaria
+  350, // Milotic
+  352, // Kecleon
+  360, // Wynaut
+  366, // Clamperl
+  367, // Huntail
+  368, // Gorebyss
+  373, // Salamence
+  385, // Jirachu
+  386 // Deoxys
 ])
