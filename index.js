@@ -10,6 +10,9 @@ const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const GENERATIONS = require('./config/generations')
 const UNOBTAINABLE = require('./config/unobtainable')
 
+const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
+const FLICKR_PER_PAGE = 500
+
 const app = express()
 
 app.use(express.static('public'))
@@ -128,10 +131,10 @@ function findUser (flickr, username) {
       } else {
         const userId = result.user.nsid
         const username = result.user.username._content
-        const user = { userId, username }
+        const response = { userId, username }
         const cacheSeconds = parseInt(process.env.FIND_USER_CACHE_SECONDS) || 1
-        mcache.put(cacheKey, user, cacheSeconds * 1000)
-        resolve(user)
+        mcache.put(cacheKey, response, cacheSeconds * 1000)
+        resolve(response)
       }
     })
   })
@@ -142,13 +145,17 @@ function getFindUserCacheKey (username) {
 }
 
 async function getPhotos (flickr, userId) {
-  const photosetId = await findPhotodexId(flickr, userId)
-  const photoset = await getPhotoset(flickr, userId, photosetId)
-  return { photosetId, ...mapPhotos(photoset.photo) }
+  const { photosetId, total } = await findPhotodex(flickr, userId)
+  const numberOfPages = Math.ceil(total / FLICKR_PER_PAGE)
+  const pages = await Promise.all([...Array(numberOfPages).keys()].map(i => {
+    const page = i + 1 // 1-indexed
+    return getPhotoset(flickr, userId, photosetId, page)
+  }))
+  const photos = pages.reduce((all, page) => all.concat(page.photo), [])
+  return { photosetId, ...mapPhotos(photos) }
 }
 
-const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
-function findPhotodexId (flickr, userId) {
+function findPhotodex (flickr, userId) {
   const cacheKey = getFindPhotodexIdCacheKey(userId)
   const cached = mcache.get(cacheKey)
   if (cached) {
@@ -162,10 +169,12 @@ function findPhotodexId (flickr, userId) {
         const photosets = result.photosets.photoset
         const photodex = photosets.find(photoset => PHOTODEX_REGEX.test(photoset.title._content))
         if (photodex) {
-          const id = photodex.id
+          const photosetId = photodex.id
+          const total = parseInt(photodex.photos)
+          const response = { photosetId, total }
           const cacheSeconds = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS) || 1
-          mcache.put(cacheKey, id, cacheSeconds * 1000)
-          resolve(id)
+          mcache.put(cacheKey, response, cacheSeconds * 1000)
+          resolve(response)
         } else {
           reject(new Error("No public album found with 'Photódex' in the title"))
         }
@@ -178,9 +187,15 @@ function getFindPhotodexIdCacheKey (userId) {
   return `findPhotodexId__${userId}`
 }
 
-function getPhotoset (flickr, userId, photosetId) {
+function getPhotoset (flickr, userId, photosetId, page) {
   return new Promise((resolve, reject) => {
-    const params = { user_id: userId, photoset_id: photosetId, extras: 'url_m,url_l' }
+    const params = {
+      user_id: userId,
+      photoset_id: photosetId,
+      extras: 'url_m,url_l',
+      per_page: FLICKR_PER_PAGE,
+      page
+    }
     flickr.photosets.getPhotos(params, (error, result) => {
       if (error) {
         reject(error)
