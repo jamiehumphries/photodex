@@ -8,7 +8,7 @@ window.initGallery = function (photoMap) {
   const $closeButton = $('#close-button')
 
   let _currentSnap = null
-  let _currentForm = 0
+  let currentFormMap = {}
   let snaps = Object.keys(photoMap).sort()
 
   const keysDown = {}
@@ -89,6 +89,7 @@ window.initGallery = function (photoMap) {
     $('.gallery-image').attr('src', '')
     enableScroll()
     $gallery.removeClass('active')
+    currentFormMap = {}
   }
 
   function slideToPreviousSnap () {
@@ -142,7 +143,8 @@ window.initGallery = function (photoMap) {
   }
 
   function changeForm (offset) {
-    setGalleryImage('current', _currentSnap, _currentForm + offset)
+    const currentForm = currentFormMap[_currentSnap] || 0
+    setGalleryImage('current', _currentSnap, currentForm + offset)
     onFormChange()
   }
 
@@ -181,8 +183,8 @@ window.initGallery = function (photoMap) {
     }
     const forms = photoMap[number]
     const $galleryImage = $('.' + position + '.gallery-image')
-    _currentForm = form ? (form + forms.length) % forms.length : 0
-    $galleryImage.attr('src', forms[_currentForm].galleryUrl)
+    currentFormMap[number] = form !== undefined ? (form + forms.length) % forms.length : (currentFormMap[number] || 0)
+    $galleryImage.attr('src', forms[currentFormMap[number]].galleryUrl)
     if (forms.length > 1) {
       $galleryImage.addClass('multiform')
     } else {
