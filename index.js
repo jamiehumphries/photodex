@@ -92,14 +92,19 @@ function updateRecentlyVisited (username) {
   recentlyVisited.add(username)
 }
 
-function getTrainerCards (usernames) {
-  return Promise.all(usernames.map(async username => {
-    const flickr = await getFlickr()
-    const { userId } = await findUser(flickr, username)
-    const { photoMap, previewThumbUrl: preview } = await getPhotos(flickr, userId)
-    const snapCount = Object.keys(photoMap).length
-    return { username, preview, snapCount, url: getTrainerUrl(username) }
+async function getTrainerCards (usernames) {
+  const cards = await Promise.all(usernames.map(async username => {
+    try {
+      const flickr = await getFlickr()
+      const { userId } = await findUser(flickr, username)
+      const { photoMap, previewThumbUrl: preview } = await getPhotos(flickr, userId)
+      const snapCount = Object.keys(photoMap).length
+      return { username, preview, snapCount, url: getTrainerUrl(username) }
+    } catch (e) {
+      return null
+    }
   }))
+  return cards.filter(card => card !== null)
 }
 
 function getFlickr () {
