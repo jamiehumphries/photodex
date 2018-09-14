@@ -1,26 +1,26 @@
 /* globals $, history, location */
 
-const ACTIVE = 'active'
-const NO_SCROLL = 'no-scroll'
-const GALLERY_IMAGE = 'gallery-image'
-const PREVIOUS = 'previous'
-const CURRENT = 'current'
-const NEXT = 'next'
-const MULTIFORM = 'multiform'
-const FORM_CHANGING = 'form-changing'
+var ACTIVE = 'active'
+var NO_SCROLL = 'no-scroll'
+var GALLERY_IMAGE = 'gallery-image'
+var PREVIOUS = 'previous'
+var CURRENT = 'current'
+var NEXT = 'next'
+var MULTIFORM = 'multiform'
+var FORM_CHANGING = 'form-changing'
 
 // @ts-ignore
 window.initGallery = function (photoMap) {
-  const $window = $(window)
-  const $body = $(document.body)
-  const $gallery = $('#gallery')
-  const $closeButton = $('#close-button')
+  var $window = $(window)
+  var $body = $(document.body)
+  var $gallery = $('#gallery')
+  var $closeButton = $('#close-button')
 
   let _currentSnap = null
   let currentFormMap = {}
   let snaps = Object.keys(photoMap).sort()
 
-  const keysDown = {}
+  var keysDown = {}
   let scrollTop
   let scrollDisabled = false
 
@@ -95,7 +95,7 @@ window.initGallery = function (photoMap) {
 
   function hideGallery () {
     setCurrentSnap(null)
-    $(`.${GALLERY_IMAGE}`).attr('src', '')
+    $('.' + GALLERY_IMAGE).attr('src', '')
     enableScroll()
     $gallery.removeClass(ACTIVE)
     currentFormMap = {}
@@ -113,9 +113,9 @@ window.initGallery = function (photoMap) {
     if (!galleryActive()) {
       return
     }
-    const snap = getSnapInDirection()
+    var snap = getSnapInDirection()
     if (!snap) {
-      const current = $(`.${CURRENT}`)
+      var current = $('.' + CURRENT)
       current.removeClass(CURRENT).addClass(awayFrom)
       setTimeout(function () {
         current.removeClass(awayFrom).addClass(CURRENT)
@@ -123,10 +123,10 @@ window.initGallery = function (photoMap) {
       return
     }
     setCurrentSnap(snap)
-    $(`.${awayFrom}`).remove()
-    $(`.${CURRENT}`).removeClass(CURRENT).addClass(awayFrom)
-    $(`.${towards}`).removeClass(towards).addClass(CURRENT)
-    $(`<img class="${GALLERY_IMAGE} ${towards}" draggable="false">`).prependTo($gallery)
+    $('.' + awayFrom).remove()
+    $('.' + CURRENT).removeClass(CURRENT).addClass(awayFrom)
+    $('.' + towards).removeClass(towards).addClass(CURRENT)
+    $('<img class="' + GALLERY_IMAGE + ' ' + towards + '" draggable="false">').prependTo($gallery)
     setGalleryImage(towards, getSnapInDirection())
   }
 
@@ -139,9 +139,9 @@ window.initGallery = function (photoMap) {
   }
 
   function changeForm (offset) {
-    const currentForm = currentFormMap[_currentSnap] || 0
+    var currentForm = currentFormMap[_currentSnap] || 0
     setGalleryImage(CURRENT, _currentSnap, currentForm + offset)
-    const $current = $(`.${CURRENT}`)
+    var $current = $('.' + CURRENT)
     $current.addClass(FORM_CHANGING)
     setTimeout(() => $current.removeClass(FORM_CHANGING), 100)
   }
@@ -151,19 +151,19 @@ window.initGallery = function (photoMap) {
   }
 
   function getPreviousSnap () {
-    const previousIndex = snaps.indexOf(_currentSnap) - 1
+    var previousIndex = snaps.indexOf(_currentSnap) - 1
     return snaps[previousIndex]
   }
 
   function getNextSnap () {
-    const nextIndex = snaps.indexOf(_currentSnap) + 1
+    var nextIndex = snaps.indexOf(_currentSnap) + 1
     return snaps[nextIndex]
   }
 
   function setCurrentSnap (snap) {
     _currentSnap = snap
     if (snap) {
-      history.replaceState(null, null, `#${snap}`)
+      history.replaceState(null, null, '#' + snap)
     } else {
       clearHash()
     }
@@ -173,8 +173,8 @@ window.initGallery = function (photoMap) {
     if (number === undefined) {
       return
     }
-    const forms = photoMap[number]
-    const $galleryImage = $(`.${position}.${GALLERY_IMAGE}`)
+    var forms = photoMap[number]
+    var $galleryImage = $('.' + position + '.' + GALLERY_IMAGE)
     currentFormMap[number] = form !== undefined ? (form + forms.length) % forms.length : (currentFormMap[number] || 0)
     $galleryImage.attr('src', forms[currentFormMap[number]].galleryUrl)
     if (forms.length > 1) {
