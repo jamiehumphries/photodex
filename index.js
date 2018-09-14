@@ -13,6 +13,11 @@ const UNOBTAINABLE = require('./config/unobtainable')
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
 const FLICKR_PER_PAGE = 500
 
+const HOME_RESPONSE_CACHE_SECONDS = parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1
+const TRAINER_RESPONSE_CACHE_SECONDS = parseInt(process.env.TRAINER_RESPONSE_CACHE_SECONDS) || 1
+const FIND_PHOTODEX_ID_CACHE_SECONDS = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS) || 1
+const FIND_USER_CACHE_SECONDS = parseInt(process.env.FIND_USER_CACHE_SECONDS) || 1
+
 const app = express()
 
 app.use(express.static('public'))
@@ -40,7 +45,7 @@ const flickrOptions = {
 const recentlyVisited = new Set()
 let _flickr = null
 
-app.get('/', cache(parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
+app.get('/', cache(HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { username } = req.query
   if (username) {
     res.redirect(getTrainerUrl(username))
@@ -57,7 +62,7 @@ app.get('/admin/dashboard', auth, async (req, res) => {
   res.render('dashboard', { subtitle, visited })
 })
 
-app.get('/:trainerName', cache(parseInt(process.env.TRAINER_RESPONSE_CACHE_SECONDS) || 1), async (req, res) => {
+app.get('/:trainerName', cache(TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
   let { trainerName } = req.params
   try {
     const flickr = await getFlickr()
@@ -137,8 +142,7 @@ function findUser (flickr, username) {
         const userId = result.user.nsid
         const username = result.user.username._content
         const response = { userId, username }
-        const cacheSeconds = parseInt(process.env.FIND_USER_CACHE_SECONDS) || 1
-        mcache.put(cacheKey, response, cacheSeconds * 1000)
+        mcache.put(cacheKey, response, FIND_USER_CACHE_SECONDS * 1000)
         resolve(response)
       }
     })
@@ -153,7 +157,8 @@ async function getPhotos (flickr, userId) {
   const { photosetId, total } = await findPhotodex(flickr, userId)
   const numberOfPages = Math.ceil(total / FLICKR_PER_PAGE)
   const pages = await Promise.all([...Array(numberOfPages).keys()].map(i => {
-    const page = i + 1 // 1-indexed
+    // Flickr API pages are 1-indexed.
+    const page = i + 1
     return getPhotoset(flickr, userId, photosetId, page)
   }))
   const photos = pages.reduce((all, page) => all.concat(page.photo), [])
@@ -177,8 +182,7 @@ function findPhotodex (flickr, userId) {
           const photosetId = photodex.id
           const total = parseInt(photodex.photos)
           const response = { photosetId, total }
-          const cacheSeconds = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS) || 1
-          mcache.put(cacheKey, response, cacheSeconds * 1000)
+          mcache.put(cacheKey, response, FIND_PHOTODEX_ID_CACHE_SECONDS * 1000)
           resolve(response)
         } else {
           reject(new Error("No public album found with 'Photódex' in the title"))
