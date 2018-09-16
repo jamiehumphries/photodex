@@ -1,6 +1,6 @@
 # Photódex
 
-_**Gotta snap 'em all!**_
+_Gotta snap 'em all!_
 
 ## Overview
 
