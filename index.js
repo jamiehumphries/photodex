@@ -50,9 +50,9 @@ app.get('/', cache(HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   if (username) {
     res.redirect(getTrainerUrl(username))
   } else {
-    const exampleUsernames = (process.env.EXAMPLES || '').split(',')
-    const examples = await getTrainerCards(exampleUsernames)
-    res.render('home', { subtitle: "Gotta snap 'em all!", examples })
+    const featuredUsernames = (process.env.FEATURED || '').split(',')
+    const featured = await getTrainerCards(featuredUsernames)
+    res.render('home', { subtitle: "Gotta snap 'em all!", featured })
   }
 })
 
