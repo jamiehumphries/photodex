@@ -217,7 +217,7 @@ function getPhotoset (flickr, userId, photosetId, page) {
 
 function mapPhotos (photos) {
   const photoMap = {}
-  let previewUrl, previewThumbUrl
+  let primaryPhoto
   photos.forEach(photo => {
     const title = photo.title
     const match = title.match(/\d{3}/)
@@ -238,14 +238,14 @@ function mapPhotos (photos) {
       photoMap[number].push(entry)
     }
     if (parseInt(photo.isprimary) === 1) {
-      previewUrl = photo.url_l
-      previewThumbUrl = photo.url_m
+      primaryPhoto = photo
     }
   })
-  if (photos.length > 0 && (!previewUrl || !previewThumbUrl)) {
-    previewUrl = photos[0].url_l
-    previewThumbUrl = photos[0].url_m
+  if (!primaryPhoto) {
+    primaryPhoto = photos[0]
   }
+  const previewUrl = primaryPhoto.url_l || primaryPhoto.url_m
+  const previewThumbUrl = primaryPhoto.url_m
   return { photoMap, previewUrl, previewThumbUrl }
 }
 
