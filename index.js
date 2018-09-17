@@ -71,27 +71,32 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
       res.redirect(getDexUrl(user.username))
       return
     }
-    const userId = user.userId
-    const { photosetId, photoMap, previewUrl } = await getPhotos(flickr, userId)
-    const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
+    const { photosetId, photoMap, previewUrl, trainerOverride } = await getPhotos(flickr, user.userId)
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
+    const trainer = trainerOverride || username
+    const flickrUrl = getFlickrUrl(user.userId, photosetId)
     const og = {
-      title: `${username}'s Photódex`,
+      title: `${trainer}'s Photódex`,
       url: 'https://www.photodex.io' + getDexUrl(username),
       image: previewUrl
     }
+    const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     updateRecentlyVisited(username)
-    res.render('dex', { subtitle, userId, photosetId, username, og, generations, photoMap: JSON.stringify(photoMap) })
+    res.render('dex', { subtitle, trainer, og, flickrUrl, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(username)
     const subtitle = '404: Not found!'
-    notFound(res, { subtitle, username, error: error.message })
+    notFound(res, { subtitle, trainer: username, error: error.message })
   }
 })
 
 function getDexUrl (username) {
   return `/${encodeURIComponent(username)}`
+}
+
+function getFlickrUrl (userId, photosetId) {
+  return `https://www.flickr.com/photos/${userId}/sets/${photosetId}`
 }
 
 function updateRecentlyVisited (username) {
@@ -103,9 +108,10 @@ async function getTrainerCards (usernames) {
     try {
       const flickr = await getFlickr()
       const { userId } = await findUser(flickr, username)
-      const { photoMap, previewThumbUrl: preview } = await getPhotos(flickr, userId)
+      const { photoMap, previewThumbUrl: preview, trainerOverride } = await getPhotos(flickr, userId)
       const snapCount = Object.keys(photoMap).length
-      return { username, preview, snapCount, url: getDexUrl(username) }
+      const trainer = trainerOverride || username
+      return { trainer, preview, snapCount, url: getDexUrl(username) }
     } catch (e) {
       return null
     }
@@ -155,7 +161,7 @@ function getFindUserCacheKey (username) {
 }
 
 async function getPhotos (flickr, userId) {
-  const { photosetId, total } = await findPhotodex(flickr, userId)
+  const { photosetId, total, trainerOverride } = await findPhotodex(flickr, userId)
   const numberOfPages = Math.ceil(total / FLICKR_PER_PAGE)
   const pages = await Promise.all([...Array(numberOfPages).keys()].map(i => {
     // Flickr API pages are 1-indexed.
@@ -163,7 +169,7 @@ async function getPhotos (flickr, userId) {
     return getPhotoset(flickr, userId, photosetId, page)
   }))
   const photos = pages.reduce((all, page) => all.concat(page.photo), [])
-  return { photosetId, ...mapPhotos(photos) }
+  return { photosetId, trainerOverride, ...mapPhotos(photos) }
 }
 
 function findPhotodex (flickr, userId) {
@@ -183,6 +189,11 @@ function findPhotodex (flickr, userId) {
           const photosetId = photodex.id
           const total = parseInt(photodex.photos)
           const response = { photosetId, total }
+          const description = photodex.description._content
+          const trainerMatch = description.match(/trainer=(\w+)/)
+          if (trainerMatch) {
+            response.trainerOverride = trainerMatch[1]
+          }
           mcache.put(cacheKey, response, FIND_PHOTODEX_ID_CACHE_SECONDS * 1000)
           resolve(response)
         } else {
