@@ -17,10 +17,7 @@
     </div>
     <div class="entries">
       {{#each entries}}
-        <div class="entry {{#if unobtainable}}unobtainable{{/if}}"
-          {{#if unobtainable}}
-            title="It is not currently possible to have encountered Pokémon #{{number}} ({{unobtainable}})."
-          {{/if}}>
+        <div class="entry {{#if unobtainable}}unobtainable{{/if}}">
           {{#if photos}}
             <a href="#{{number}}">
               {{#with photos.[0]}}
