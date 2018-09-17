@@ -1,46 +1,46 @@
-module.exports = Object.freeze([
-  172, // Pichu
-  173, // Cleffa
-  174, // Igglybuff
-  175, // Togepi
-  182, // Bellossom
-  186, // Politoed
-  192, // Sunflora
-  196, // Espeon
-  197, // Umbreon
-  199, // Slowking
-  208, // Steelix
-  212, // Scizor
-  230, // Kingdra
-  233, // Porygon2
-  235, // Smeargle
-  236, // Tyrogue
-  238, // Smoochum
-  239, // Elekid
-  240, // Magby
-  254, // Sceptile
-  257, // Blaziken
-  260, // Marshtomp
-  266, // Silcoon
-  267, // Beautifly
-  268, // Cascoon
-  269, // Dustox
-  290, // Nincada
-  291, // Ninjask
-  292, // Shedinja
-  295, // Exploud
-  298, // Azurill
-  308, // Medicham
-  321, // Wailord
-  330, // Flygon
-  334, // Altaria
-  350, // Milotic
-  352, // Kecleon
-  360, // Wynaut
-  366, // Clamperl
-  367, // Huntail
-  368, // Gorebyss
-  373, // Salamence
-  385, // Jirachu
-  386 // Deoxys
-])
+module.exports = Object.freeze({
+  '172': 'Pichu',
+  '173': 'Cleffa',
+  '174': 'Igglybuff',
+  '175': 'Togepi',
+  '182': 'Bellossom',
+  '186': 'Politoed',
+  '192': 'Sunflora',
+  '196': 'Espeon',
+  '197': 'Umbreon',
+  '199': 'Slowking',
+  '208': 'Steelix',
+  '212': 'Scizor',
+  '230': 'Kingdra',
+  '233': 'Porygon2',
+  '235': 'Smeargle',
+  '236': 'Tyrogue',
+  '238': 'Smoochum',
+  '239': 'Elekid',
+  '240': 'Magby',
+  '254': 'Sceptile',
+  '257': 'Blaziken',
+  '260': 'Marshtomp',
+  '266': 'Silcoon',
+  '267': 'Beautifly',
+  '268': 'Cascoon',
+  '269': 'Dustox',
+  '290': 'Nincada',
+  '291': 'Ninjask',
+  '292': 'Shedinja',
+  '295': 'Exploud',
+  '298': 'Azurill',
+  '308': 'Medicham',
+  '321': 'Wailord',
+  '330': 'Flygon',
+  '334': 'Altaria',
+  '350': 'Milotic',
+  '352': 'Kecleon',
+  '360': 'Wynaut',
+  '366': 'Clamperl',
+  '367': 'Huntail',
+  '368': 'Gorebyss',
+  '373': 'Salamence',
+  '385': 'Jirachi',
+  '386': 'Deoxys'
+})

@@ -254,7 +254,7 @@ function withDexEntries (generation, photoMap) {
   const entries = []
   for (let i = start; i <= end; i++) {
     const number = padNumber(i)
-    const unobtainable = UNOBTAINABLE.indexOf(i) !== -1
+    const unobtainable = UNOBTAINABLE[number]
     const photos = photoMap[number]
     entries.push({ number, unobtainable, photos })
   }
