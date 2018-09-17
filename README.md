@@ -68,7 +68,7 @@ ENFORCE_HTTPS = no
 # Various cache durations for different endpoints and API calls.
 # These are optional and can be omitted.
 HOME_RESPONSE_CACHE_SECONDS = 1
-TRAINER_RESPONSE_CACHE_SECONDS = 1
+DEX_RESPONSE_CACHE_SECONDS = 1
 FIND_USER_CACHE_SECONDS = 1
 FIND_PHOTODEX_ID_CACHE_SECONDS = 1
 ```

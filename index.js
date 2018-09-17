@@ -14,7 +14,7 @@ const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
 const FLICKR_PER_PAGE = 500
 
 const HOME_RESPONSE_CACHE_SECONDS = parseInt(process.env.HOME_RESPONSE_CACHE_SECONDS) || 1
-const TRAINER_RESPONSE_CACHE_SECONDS = parseInt(process.env.TRAINER_RESPONSE_CACHE_SECONDS) || 1
+const DEX_RESPONSE_CACHE_SECONDS = parseInt(process.env.DEX_RESPONSE_CACHE_SECONDS) || 1
 const FIND_PHOTODEX_ID_CACHE_SECONDS = parseInt(process.env.FIND_PHOTODEX_ID_CACHE_SECONDS) || 1
 const FIND_USER_CACHE_SECONDS = parseInt(process.env.FIND_USER_CACHE_SECONDS) || 1
 
@@ -48,7 +48,7 @@ let _flickr = null
 app.get('/', cache(HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { username } = req.query
   if (username) {
-    res.redirect(getTrainerUrl(username))
+    res.redirect(getDexUrl(username))
   } else {
     const featuredUsernames = (process.env.FEATURED || '').split(',')
     const featured = await getTrainerCards(featuredUsernames)
@@ -62,34 +62,35 @@ app.get('/admin/dashboard', auth, async (req, res) => {
   res.render('dashboard', { subtitle, visited })
 })
 
-app.get('/:trainerName', cache(TRAINER_RESPONSE_CACHE_SECONDS), async (req, res) => {
-  let { trainerName } = req.params
+app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
+  let { username } = req.params
   try {
     const flickr = await getFlickr()
-    const { userId, username } = await findUser(flickr, trainerName)
-    if (username !== trainerName) {
-      res.redirect(getTrainerUrl(username))
+    const user = await findUser(flickr, username)
+    if (user.username !== username) {
+      res.redirect(getDexUrl(user.username))
       return
     }
+    const userId = user.userId
     const { photosetId, photoMap, previewUrl } = await getPhotos(flickr, userId)
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
     const og = {
       title: `${username}'s Photódex`,
-      url: 'https://www.photodex.io' + getTrainerUrl(username),
+      url: 'https://www.photodex.io' + getDexUrl(username),
       image: previewUrl
     }
     updateRecentlyVisited(username)
     res.render('dex', { subtitle, userId, photosetId, username, og, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
-    clearCaches(trainerName)
+    clearCaches(username)
     const subtitle = '404: Not found!'
-    notFound(res, { subtitle, username: trainerName, error: error.message })
+    notFound(res, { subtitle, username, error: error.message })
   }
 })
 
-function getTrainerUrl (username) {
+function getDexUrl (username) {
   return `/${encodeURIComponent(username)}`
 }
 
@@ -104,7 +105,7 @@ async function getTrainerCards (usernames) {
       const { userId } = await findUser(flickr, username)
       const { photoMap, previewThumbUrl: preview } = await getPhotos(flickr, userId)
       const snapCount = Object.keys(photoMap).length
-      return { username, preview, snapCount, url: getTrainerUrl(username) }
+      return { username, preview, snapCount, url: getDexUrl(username) }
     } catch (e) {
       return null
     }
