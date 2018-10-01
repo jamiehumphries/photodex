@@ -41,6 +41,5 @@ module.exports = Object.freeze([
   367, // Huntail
   368, // Gorebyss
   373, // Salamence
-  385, // Jirachu
-  386 // Deoxys
+  385 // Jirachu
 ])
