@@ -177,6 +177,9 @@
       &.form-changing {
         box-shadow: 5px 5px 0 $multiform-shadow, 10px 10px 0 darken($multiform-shadow, 10%), 5px 5px 50px $gallery-shadow;
       }
+      &.new-form-loading {
+        filter: brightness(50%);
+      }
     }
   }
 

@@ -8,6 +8,7 @@ var CURRENT = 'current'
 var NEXT = 'next'
 var MULTIFORM = 'multiform'
 var FORM_CHANGING = 'form-changing'
+var NEW_FORM_LOADING = 'new-form-loading'
 
 // @ts-ignore
 window.initGallery = function (photoMap) {
@@ -139,11 +140,17 @@ window.initGallery = function (photoMap) {
   }
 
   function changeForm (offset) {
-    var currentForm = currentFormMap[_currentSnap] || 0
-    setGalleryImage(CURRENT, _currentSnap, currentForm + offset)
     var $current = $('.' + CURRENT)
     $current.addClass(FORM_CHANGING)
-    setTimeout(() => $current.removeClass(FORM_CHANGING), 100)
+    setTimeout(function () {
+      $current.removeClass(FORM_CHANGING)
+    }, 100)
+    $current.addClass(NEW_FORM_LOADING)
+    $current.one('load', function () {
+      $current.removeClass(NEW_FORM_LOADING)
+    })
+    var currentForm = currentFormMap[_currentSnap] || 0
+    setGalleryImage(CURRENT, _currentSnap, currentForm + offset)
   }
 
   function galleryActive () {
