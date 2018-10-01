@@ -228,6 +228,7 @@ function getPhotoset (flickr, userId, photosetId, page) {
 }
 
 function mapPhotos (photos) {
+  const maxNumber = GENERATIONS[GENERATIONS.length - 1].end.toString()
   const photoMap = {}
   let primaryPhoto
   photos.forEach(photo => {
@@ -235,6 +236,9 @@ function mapPhotos (photos) {
     const match = title.match(/\d{3}/)
     if (match) {
       const number = match[0]
+      if (number > maxNumber) {
+        return
+      }
       const { url_m: thumbUrl, url_l: galleryUrl, height_m: height, width_m: width } = photo
       const ratio = parseInt(width) / parseInt(height)
       const isLandscape = ratio > 1
