@@ -145,6 +145,10 @@
   left: 0;
   display: flex;
 
+  &.active ~ .generation .entry a:focus img {
+    filter: none;
+  }
+
   &:not(.active) {
     display: none;
   }
