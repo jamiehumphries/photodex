@@ -56,7 +56,7 @@ yarn
 FLICKR_API_KEY = your_api_key
 
 # The password used to access /admin/dashboard with the username 'admin'.
-# The password Can be anything non-empty.
+# The password can be anything non-empty.
 ADMIN_PASSWORD = your_password
 
 # Comma-separated list of usernames to show in the 'Featured' section of the home page.
