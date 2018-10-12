@@ -65,6 +65,10 @@ window.initGallery = function (photoMap) {
         break
       case 27: // Escape.
         hideGallery()
+        if (document.activeElement) {
+          // @ts-ignore
+          document.activeElement.blur()
+        }
         break
     }
   }).keyup(function (e) {
