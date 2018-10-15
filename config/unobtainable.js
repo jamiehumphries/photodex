@@ -1,4 +1,5 @@
 module.exports = Object.freeze([
+  // JOHTO
   172, // Pichu
   173, // Cleffa
   174, // Igglybuff
@@ -18,6 +19,7 @@ module.exports = Object.freeze([
   238, // Smoochum
   239, // Elekid
   240, // Magby
+  // HOENN
   254, // Sceptile
   257, // Blaziken
   260, // Marshtomp
@@ -41,5 +43,113 @@ module.exports = Object.freeze([
   367, // Huntail
   368, // Gorebyss
   373, // Salamence
-  385 // Jirachi
+  385, // Jirachi
+  // SINNOH
+  387, // Turtwig
+  388, // Grotle
+  389, // Torterra
+  390, // Chimchar
+  391, // Monferno
+  392, // Infernape
+  393, // Piplup
+  394, // Prinplup
+  395, // Empoleon
+  396, // Starly
+  397, // Staravia
+  398, // Staraptor
+  399, // Bidoof
+  400, // Bibarel
+  401, // Kricketot
+  402, // Kricketune
+  403, // Shinx
+  404, // Luxio
+  405, // Luxray
+  406, // Budew
+  407, // Roserade
+  408, // Cranidos
+  409, // Rampardos
+  410, // Shieldon
+  411, // Bastiodon
+  412, // Burmy
+  413, // Wormadam
+  414, // Mothim
+  415, // Combee
+  416, // Vespiquen
+  417, // Pachirisu
+  418, // Buizel
+  419, // Floatzel
+  420, // Cherubi
+  421, // Cherrim
+  422, // Shellos
+  423, // Gastrodon
+  424, // Ambipom
+  425, // Drifloon
+  426, // Drifblim
+  427, // Buneary
+  428, // Lopunny
+  429, // Mismagius
+  430, // Honchkrow
+  431, // Glameow
+  432, // Purugly
+  433, // Chingling
+  434, // Stunky
+  435, // Skuntank
+  436, // Bronzor
+  437, // Bronzong
+  438, // Bonsly
+  439, // Mime Jr.
+  440, // Happiny
+  441, // Chatot
+  442, // Spiritomb
+  443, // Gible
+  444, // Gabite
+  445, // Garchomp
+  446, // Munchlax
+  447, // Riolu
+  448, // Lucario
+  449, // Hippopotas
+  450, // Hippowdon
+  451, // Skorupi
+  452, // Drapion
+  453, // Croagunk
+  454, // Toxicroak
+  455, // Carnivine
+  456, // Finneon
+  457, // Lumineon
+  458, // Mantyke
+  459, // Snover
+  460, // Abomasnow
+  461, // Weavile
+  462, // Magnezone
+  463, // Lickilicky
+  464, // Rhyperior
+  465, // Tangrowth
+  466, // Electivire
+  467, // Magmortar
+  468, // Togekiss
+  469, // Yanmega
+  470, // Leafeon
+  471, // Glaceon
+  472, // Gliscor
+  473, // Mamoswine
+  474, // Porygon-Z
+  475, // Gallade
+  476, // Probopass
+  477, // Dusknoir
+  478, // Froslass
+  479, // Rotom
+  480, // Uxie
+  481, // Mesprit
+  482, // Azelf
+  483, // Dialga
+  484, // Palkia
+  485, // Heatran
+  486, // Regigigas
+  487, // Giratina
+  488, // Cresselia
+  489, // Phione
+  490, // Manaphy
+  491, // Darkrai
+  492, // Shaymin
+  493 // Arceus
 ])

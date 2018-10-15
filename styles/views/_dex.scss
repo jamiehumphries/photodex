@@ -60,6 +60,10 @@
     @include generation($separator-hoenn, $entry-hoenn);
   }
 
+  .generation.sinnoh {
+    @include generation($separator-sinnoh, $entry-sinnoh);
+  }
+
   @mixin entry($size) {
     margin: calc(#{$size} / 32);
     width: #{$size};
