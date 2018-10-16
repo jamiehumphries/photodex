@@ -48,7 +48,6 @@ module.exports = Object.freeze([
   389, // Torterra
   392, // Infernape
   395, // Empoleon
-  403, // Shinx
   404, // Luxio
   405, // Luxray
   406, // Budew
@@ -62,7 +61,6 @@ module.exports = Object.freeze([
   414, // Mothim
   415, // Combee
   416, // Vespiquen
-  417, // Pachirisu
   418, // Buizel
   419, // Floatzel
   420, // Cherubi
