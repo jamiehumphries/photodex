@@ -10,7 +10,6 @@ var MULTIFORM = 'multiform'
 var FORM_CHANGING = 'form-changing'
 var NEW_FORM_LOADING = 'new-form-loading'
 
-// @ts-ignore
 window.initGallery = function (photoMap) {
   var $window = $(window)
   var $body = $(document.body)
@@ -37,7 +36,6 @@ window.initGallery = function (photoMap) {
     hideGallery()
   })
 
-  // @ts-ignore
   $window.swiperight(function () {
     slideToPreviousSnap()
   }).swipeleft(function () {
@@ -85,7 +83,6 @@ window.initGallery = function (photoMap) {
     }
   })
 
-  // @ts-ignore
   // Trigger initial gallery image display.
   $window.hashchange()
 
@@ -224,7 +221,6 @@ window.initGallery = function (photoMap) {
       return
     }
     history.replaceState(null, null, location.pathname)
-    // @ts-ignore
     $window.hashchange()
   }
 }

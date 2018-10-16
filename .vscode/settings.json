@@ -3,6 +3,5 @@
   "eslint.enable": true,
   "eslint.packageManager": "yarn",
   "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true,
-  "javascript.implicitProjectConfig.checkJs": true
+  "files.trimTrailingWhitespace": true
 }
