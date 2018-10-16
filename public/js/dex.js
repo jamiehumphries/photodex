@@ -128,7 +128,7 @@ window.initGallery = function (photoMap) {
     $('.' + awayFrom).remove()
     $('.' + CURRENT).removeClass(CURRENT).addClass(awayFrom)
     $('.' + towards).removeClass(towards).addClass(CURRENT)
-    $('<img class="' + GALLERY_IMAGE + ' ' + towards + '" draggable="false">').prependTo($gallery)
+    $('<img class="' + GALLERY_IMAGE + ' ' + towards + '" alt="Gallery image" draggable="false">').prependTo($gallery)
     setGalleryImage(towards, getSnapInDirection())
   }
 
