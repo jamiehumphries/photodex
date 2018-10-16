@@ -100,7 +100,8 @@ app.get('/api/trainer/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req,
     const flickr = await getFlickr()
     const { userId } = await findUser(flickr, username)
     const { photosetId, photoMap: photos, previewUrl, previewThumbUrl } = await getPhotos(flickr, userId, false)
-    res.json({ userId, photosetId, photos, previewUrl, previewThumbUrl })
+    const count = Object.keys(photos).length
+    res.json({ userId, photosetId, previewUrl, previewThumbUrl, count, photos })
   } catch (error) {
     res.sendStatus(404)
   }
