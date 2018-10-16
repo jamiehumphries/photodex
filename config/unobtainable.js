@@ -45,22 +45,9 @@ module.exports = Object.freeze([
   373, // Salamence
   385, // Jirachi
   // SINNOH
-  387, // Turtwig
-  388, // Grotle
   389, // Torterra
-  390, // Chimchar
-  391, // Monferno
   392, // Infernape
-  393, // Piplup
-  394, // Prinplup
   395, // Empoleon
-  396, // Starly
-  397, // Staravia
-  398, // Staraptor
-  399, // Bidoof
-  400, // Bibarel
-  401, // Kricketot
-  402, // Kricketune
   403, // Shinx
   404, // Luxio
   405, // Luxray
@@ -85,8 +72,6 @@ module.exports = Object.freeze([
   424, // Ambipom
   425, // Drifloon
   426, // Drifblim
-  427, // Buneary
-  428, // Lopunny
   429, // Mismagius
   430, // Honchkrow
   431, // Glameow
@@ -99,7 +84,6 @@ module.exports = Object.freeze([
   438, // Bonsly
   439, // Mime Jr.
   440, // Happiny
-  441, // Chatot
   442, // Spiritomb
   443, // Gible
   444, // Gabite
@@ -113,7 +97,6 @@ module.exports = Object.freeze([
   452, // Drapion
   453, // Croagunk
   454, // Toxicroak
-  455, // Carnivine
   456, // Finneon
   457, // Lumineon
   458, // Mantyke
