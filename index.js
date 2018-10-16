@@ -71,7 +71,7 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
       res.redirect(getDexUrl(user.username))
       return
     }
-    const { photosetId, photoMap, previewUrl, trainerOverride } = await getPhotos(flickr, user.userId)
+    const { photosetId, photoMap, previewUrl, trainerOverride } = await getPhotos(flickr, user.userId, true)
     const snapCount = Object.keys(photoMap).length
     const subtitle = `Snapped: ${snapCount}`
     const trainer = trainerOverride || username
@@ -88,6 +88,18 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
     clearCaches(username)
     const subtitle = '404: Not found!'
     notFound(res, { subtitle, trainer: username, error: error.message })
+  }
+})
+
+app.get('/api/trainer/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
+  const { username } = req.params
+  try {
+    const flickr = await getFlickr()
+    const { userId } = await findUser(flickr, username)
+    const { photosetId, photoMap: photos, previewUrl, previewThumbUrl } = await getPhotos(flickr, userId, false)
+    res.json({ userId, photosetId, photos, previewUrl, previewThumbUrl })
+  } catch (error) {
+    res.sendStatus(404)
   }
 })
 
@@ -108,7 +120,7 @@ async function getTrainerCards (usernames) {
     try {
       const flickr = await getFlickr()
       const { userId } = await findUser(flickr, username)
-      const { photoMap, previewThumbUrl: preview, trainerOverride } = await getPhotos(flickr, userId)
+      const { photoMap, previewThumbUrl: preview, trainerOverride } = await getPhotos(flickr, userId, false)
       const snapCount = Object.keys(photoMap).length
       const trainer = trainerOverride || username
       return { trainer, preview, snapCount, url: getDexUrl(username) }
@@ -160,7 +172,7 @@ function getFindUserCacheKey (username) {
   return `findUser__${username.toLowerCase()}`
 }
 
-async function getPhotos (flickr, userId) {
+async function getPhotos (flickr, userId, includeDisplayMetadata) {
   const { photosetId, total, trainerOverride } = await findPhotodex(flickr, userId)
   const numberOfPages = Math.ceil(total / FLICKR_PER_PAGE)
   const pages = await Promise.all([...Array(numberOfPages).keys()].map(i => {
@@ -169,7 +181,7 @@ async function getPhotos (flickr, userId) {
     return getPhotoset(flickr, userId, photosetId, page)
   }))
   const photos = pages.reduce((all, page) => all.concat(page.photo), [])
-  return { photosetId, trainerOverride, ...mapPhotos(photos) }
+  return { photosetId, trainerOverride, ...mapPhotos(photos, includeDisplayMetadata) }
 }
 
 function findPhotodex (flickr, userId) {
@@ -227,7 +239,7 @@ function getPhotoset (flickr, userId, photosetId, page) {
   })
 }
 
-function mapPhotos (photos) {
+function mapPhotos (photos, includeDisplayMetadata) {
   const maxNumber = GENERATIONS[GENERATIONS.length - 1].end.toString()
   const photoMap = {}
   let primaryPhoto
@@ -240,15 +252,18 @@ function mapPhotos (photos) {
         return
       }
       const { url_m: thumbUrl, url_l: galleryUrl, height_m: height, width_m: width } = photo
-      const ratio = parseInt(width) / parseInt(height)
-      const isLandscape = ratio > 1
-      const orientation = isLandscape ? 'landscape' : 'portrait'
-      const entry = { title, thumbUrl, galleryUrl: galleryUrl || thumbUrl, orientation }
-      const positionMatch = title.match(/position=(top|bottom|left|right)/)
-      if (positionMatch) {
-        entry.position = positionMatch[1]
-      } else if (isLandscape) {
-        entry.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
+      const entry = { thumbUrl, galleryUrl: galleryUrl || thumbUrl }
+      if (includeDisplayMetadata) {
+        entry.title = title
+        const ratio = parseInt(width) / parseInt(height)
+        const isLandscape = ratio > 1
+        entry.orientation = isLandscape ? 'landscape' : 'portrait'
+        const positionMatch = title.match(/position=(top|bottom|left|right)/)
+        if (positionMatch) {
+          entry.position = positionMatch[1]
+        } else if (isLandscape) {
+          entry.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
+        }
       }
       photoMap[number] = photoMap[number] || []
       photoMap[number].push(entry)
