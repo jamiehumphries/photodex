@@ -83,6 +83,9 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
     }
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
     updateRecentlyVisited(username)
+    Object.keys(photoMap).forEach(key => {
+      photoMap[key] = photoMap[key].map(photo => { return { galleryUrl: photo.galleryUrl } })
+    })
     res.render('dex', { subtitle, trainer, og, flickrUrl, generations, photoMap: JSON.stringify(photoMap) })
   } catch (error) {
     clearCaches(username)
