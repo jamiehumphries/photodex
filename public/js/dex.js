@@ -64,7 +64,6 @@ window.initGallery = function (photoMap) {
       case 27: // Escape.
         hideGallery()
         if (document.activeElement) {
-          // @ts-ignore
           document.activeElement.blur()
         }
         break
