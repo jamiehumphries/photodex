@@ -10,6 +10,8 @@ const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const GENERATIONS = require('./config/generations')
 const UNOBTAINABLE = require('./config/unobtainable')
 
+const BASE_URL = 'https://www.photodex.io'
+
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
 const FLICKR_PER_PAGE = 500
 
@@ -78,7 +80,7 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
     const flickrUrl = getFlickrUrl(user.userId, photosetId)
     const og = {
       title: `${trainer}'s Photódex`,
-      url: 'https://www.photodex.io' + getDexUrl(username),
+      url: BASE_URL + getDexUrl(username),
       image: previewUrl
     }
     const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
@@ -95,13 +97,14 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
 })
 
 app.get('/api/trainer/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
-  const { username } = req.params
   try {
     const flickr = await getFlickr()
-    const { userId } = await findUser(flickr, username)
+    const { userId, username } = await findUser(flickr, req.params.username)
     const { photosetId, photoMap: photos, previewUrl, previewThumbUrl } = await getPhotos(flickr, userId, false)
+    const photodexUrl = BASE_URL + getDexUrl(username)
+    const flickrUrl = getFlickrUrl(userId, photosetId)
     const count = Object.keys(photos).length
-    res.json({ userId, photosetId, previewUrl, previewThumbUrl, count, photos })
+    res.json({ username, photodexUrl, userId, photosetId, flickrUrl, previewUrl, previewThumbUrl, count, photos })
   } catch (error) {
     res.sendStatus(404)
   }
