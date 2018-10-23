@@ -68,21 +68,18 @@ module.exports = Object.freeze([
   422, // Shellos
   423, // Gastrodon
   424, // Ambipom
-  425, // Drifloon
   426, // Drifblim
   429, // Mismagius
   430, // Honchkrow
   431, // Glameow
   432, // Purugly
   433, // Chingling
-  434, // Stunky
   435, // Skuntank
   436, // Bronzor
   437, // Bronzong
   438, // Bonsly
   439, // Mime Jr.
   440, // Happiny
-  442, // Spiritomb
   443, // Gible
   444, // Gabite
   445, // Garchomp
@@ -126,7 +123,6 @@ module.exports = Object.freeze([
   484, // Palkia
   485, // Heatran
   486, // Regigigas
-  487, // Giratina
   488, // Cresselia
   489, // Phione
   490, // Manaphy
