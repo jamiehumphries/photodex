@@ -16,13 +16,13 @@ window.initGallery = function (photoMap) {
   var $gallery = $('#gallery')
   var $closeButton = $('#close-button')
 
-  let _currentSnap = null
-  let currentFormMap = {}
-  let snaps = Object.keys(photoMap).sort()
+  var _currentSnap = null
+  var currentFormMap = {}
+  var snaps = Object.keys(photoMap).sort()
 
   var keysDown = {}
-  let scrollTop
-  let scrollDisabled = false
+  var scrollTop
+  var scrollDisabled = false
 
   $gallery.click(function (e) {
     if (e.target === this) {

@@ -27,9 +27,7 @@ module.exports = Object.freeze([
   267, // Beautifly
   268, // Cascoon
   269, // Dustox
-  290, // Nincada
   291, // Ninjask
-  292, // Shedinja
   295, // Exploud
   298, // Azurill
   308, // Medicham
