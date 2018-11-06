@@ -66,13 +66,11 @@ module.exports = Object.freeze([
   422, // Shellos
   423, // Gastrodon
   424, // Ambipom
-  426, // Drifblim
   429, // Mismagius
   430, // Honchkrow
   431, // Glameow
   432, // Purugly
   433, // Chingling
-  435, // Skuntank
   436, // Bronzor
   437, // Bronzong
   438, // Bonsly
