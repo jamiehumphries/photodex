@@ -122,5 +122,6 @@ module.exports = Object.freeze([
   490, // Manaphy
   491, // Darkrai
   492, // Shaymin
-  493 // Arceus
+  493, // Arceus
+  809 // Melmetal
 ])

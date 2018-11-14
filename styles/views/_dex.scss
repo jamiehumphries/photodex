@@ -64,6 +64,10 @@
     @include generation($separator-sinnoh, $entry-sinnoh);
   }
 
+  .generation.unknown {
+    @include generation($separator-unknown, $entry-unknown);
+  }
+
   @mixin entry($size) {
     margin: calc(#{$size} / 32);
     width: #{$size};

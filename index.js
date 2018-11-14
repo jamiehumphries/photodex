@@ -247,7 +247,6 @@ function getPhotoset (flickr, userId, photosetId, page) {
 }
 
 function mapPhotos (photos, includeDisplayMetadata) {
-  const maxNumber = GENERATIONS[GENERATIONS.length - 1].end.toString()
   const photoMap = {}
   let primaryPhoto
   photos.forEach(photo => {
@@ -255,7 +254,7 @@ function mapPhotos (photos, includeDisplayMetadata) {
     const match = title.match(/\d{3}/)
     if (match) {
       const number = match[0]
-      if (number > maxNumber) {
+      if (!isValidNumber(number)) {
         return
       }
       const { url_m: thumbUrl, url_l: galleryUrl, height_m: height, width_m: width } = photo
@@ -285,6 +284,11 @@ function mapPhotos (photos, includeDisplayMetadata) {
   const previewUrl = primaryPhoto.url_l || primaryPhoto.url_m
   const previewThumbUrl = primaryPhoto.url_m
   return { photoMap, previewUrl, previewThumbUrl }
+}
+
+function isValidNumber (number) {
+  number = parseInt(number)
+  return GENERATIONS.find(gen => gen.start <= number && number <= gen.end) !== undefined
 }
 
 function withDexEntries (generation, photoMap) {
