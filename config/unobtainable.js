@@ -7,8 +7,6 @@ module.exports = Object.freeze([
   182, // Bellossom
   186, // Politoed
   192, // Sunflora
-  196, // Espeon
-  197, // Umbreon
   199, // Slowking
   208, // Steelix
   212, // Scizor
