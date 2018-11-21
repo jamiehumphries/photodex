@@ -83,7 +83,7 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
       url: BASE_URL + getDexUrl(username),
       image: previewUrl
     }
-    const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap))
+    const generations = GENERATIONS.map(gen => withDexEntries(gen, photoMap)).filter(gen => gen.entries.length > 0)
     updateRecentlyVisited(username)
     Object.keys(photoMap).forEach(key => {
       photoMap[key] = photoMap[key].map(photo => { return { galleryUrl: photo.galleryUrl } })
@@ -297,8 +297,11 @@ function withDexEntries (generation, photoMap) {
   for (let i = start; i <= end; i++) {
     const number = padNumber(i)
     const unobtainable = UNOBTAINABLE.indexOf(i) !== -1
-    const photos = photoMap[number]
+    const photos = photoMap[number] || []
     entries.push({ number, unobtainable, photos })
+  }
+  while (entries.length > 0 && entries[entries.length - 1].photos.length === 0) {
+    entries.pop()
   }
   return { region, entries }
 }

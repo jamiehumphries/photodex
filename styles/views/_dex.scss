@@ -48,24 +48,10 @@
     }
   }
 
-  .generation.kanto {
-    @include generation($separator-kanto, $entry-kanto);
-  }
-
-  .generation.johto {
-    @include generation($separator-johto, $entry-johto);
-  }
-
-  .generation.hoenn {
-    @include generation($separator-hoenn, $entry-hoenn);
-  }
-
-  .generation.sinnoh {
-    @include generation($separator-sinnoh, $entry-sinnoh);
-  }
-
-  .generation.unknown {
-    @include generation($separator-unknown, $entry-unknown);
+  @each $region, $colors in $regions {
+    .generation.#{$region} {
+      @include generation(nth($colors, 1), nth($colors, 2));
+    }
   }
 
   @mixin entry($size) {

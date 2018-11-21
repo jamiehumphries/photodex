@@ -12,14 +12,14 @@ $text-light: #B6A9DE;
 $text-white: #F0F0FF;
 $text-error: #DC143C;
 
-$separator-kanto: #9084F8;
-$separator-johto: #96BAF7;
-$separator-hoenn: #7CA6F9;
-$separator-sinnoh: #9ABAF9;
-$separator-unknown: #D4BEDA;
-
-$entry-kanto: #C9C9FF;
-$entry-johto: #BED3FE;
-$entry-hoenn: #B6C6F9;
-$entry-sinnoh: #BFCBFB;
-$entry-unknown: #E4CEEA;
+// Region colors (separator, entry).
+$regions: (
+  kanto: (#9084F8, #C9C9FF),
+  johto: (#96BAF7, #BED3FE),
+  hoenn: (#7CA6F9, #B6C6F9),
+  sinnoh: (#9ABAF9, #BFCBFB),
+  unova: (#9084F8, #C9C9FF),
+  kalos: (#96BAF7, #BED3FE),
+  alola: (#7CA6F9, #B6C6F9),
+  unknown: (#D4BEDA, #E4CEEA)
+);
