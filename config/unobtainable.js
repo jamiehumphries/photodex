@@ -115,7 +115,6 @@ module.exports = Object.freeze([
   484, // Palkia
   485, // Heatran
   486, // Regigigas
-  488, // Cresselia
   489, // Phione
   490, // Manaphy
   491, // Darkrai
