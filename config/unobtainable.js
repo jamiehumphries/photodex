@@ -67,7 +67,6 @@ module.exports = Object.freeze([
   431, // Glameow
   432, // Purugly
   433, // Chingling
-  437, // Bronzong
   438, // Bonsly
   439, // Mime Jr.
   440, // Happiny
@@ -79,11 +78,7 @@ module.exports = Object.freeze([
   448, // Lucario
   449, // Hippopotas
   450, // Hippowdon
-  452, // Drapion
-  454, // Toxicroak
-  457, // Lumineon
   458, // Mantyke
-  460, // Abomasnow
   461, // Weavile
   462, // Magnezone
   463, // Lickilicky
