@@ -102,7 +102,6 @@ module.exports = Object.freeze([
   481, // Mesprit
   482, // Azelf
   483, // Dialga
-  484, // Palkia
   486, // Regigigas
   489, // Phione
   490, // Manaphy
