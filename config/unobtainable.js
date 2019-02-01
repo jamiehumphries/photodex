@@ -48,14 +48,11 @@ module.exports = Object.freeze([
   405, // Luxray
   406, // Budew
   407, // Roserade
-  408, // Cranidos
   409, // Rampardos
-  410, // Shieldon
   411, // Bastiodon
   412, // Burmy
   413, // Wormadam
   414, // Mothim
-  415, // Combee
   416, // Vespiquen
   420, // Cherubi
   421, // Cherrim
@@ -64,8 +61,6 @@ module.exports = Object.freeze([
   424, // Ambipom
   429, // Mismagius
   430, // Honchkrow
-  431, // Glameow
-  432, // Purugly
   433, // Chingling
   438, // Bonsly
   439, // Mime Jr.
