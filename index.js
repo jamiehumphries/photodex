@@ -8,7 +8,6 @@ const mcache = require('memory-cache')
 const cache = require('./helpers/cache')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const GENERATIONS = require('./config/generations')
-const UNOBTAINABLE = require('./config/unobtainable')
 
 const BASE_URL = 'https://www.photodex.io'
 
@@ -301,9 +300,8 @@ function withDexEntries (generation, photoMap) {
   const entries = []
   for (let i = start; i <= end; i++) {
     const number = padNumber(i)
-    const unobtainable = UNOBTAINABLE.indexOf(i) !== -1
     const photos = photoMap[number] || []
-    entries.push({ number, unobtainable, photos })
+    entries.push({ number, photos })
   }
   while (entries.length > 0 && entries[entries.length - 1].photos.length === 0) {
     entries.pop()

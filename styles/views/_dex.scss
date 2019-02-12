@@ -40,11 +40,8 @@
     .separator {
       background-color: $separtor-color;
     }
-    .entry:not(.unobtainable) {
+    .entry {
       background-color: $entry-color;
-    }
-    .entry.unobtainable {
-      color: $entry-color;
     }
   }
 
@@ -115,10 +112,6 @@
         }
         max-height: 100%;
       }
-    }
-
-    &.unobtainable {
-      background-color: rgba(255, 255, 255, 0.15);
     }
 
     &.placeholder {
