@@ -265,8 +265,13 @@ function mapPhotos (photos, includeDisplayMetadata) {
         const isLandscape = ratio > 1
         entry.orientation = isLandscape ? 'landscape' : 'portrait'
         const positionMatch = title.match(/position=(top|bottom|left|right)/)
+        const arrowMatch = title.match(/(↑|↓|←|→)/)
         if (positionMatch) {
           entry.position = positionMatch[1]
+        } else if (arrowMatch) {
+          const arrowPositions = { '↑': 'top', '↓': 'bottom', '←': 'left', '→': 'right' }
+          const arrow = arrowMatch[1]
+          entry.position = arrowPositions[arrow]
         } else if (isLandscape) {
           entry.thumbCss = `left: -${((ratio - 1) / 2) * 100}%;`
         }
