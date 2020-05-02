@@ -26,7 +26,6 @@ If you would like to contribute to Photódex or to make your own fork of the sit
 * [Git](https://git-scm.com/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Node](https://nodejs.org/en/)
-* [Yarn](https://yarnpkg.com/en/)
 
 #### Recommended VS Code extensions
 
@@ -45,10 +44,10 @@ You will need it later in your `.env` file.
 ```
 git clone git@github.com:jamiehumphries/photodex.git
 ```
-* Install all dependencies via Yarn:
+* Install all dependencies via NPM:
 ```
 cd photodex/
-yarn
+npm install
 ```
 * Create a file named `.env` at the root of the project to store your Flickr API key and other configuration. The contents of the file should be:
 ```
@@ -74,7 +73,7 @@ FIND_PHOTODEX_ID_CACHE_SECONDS = 1
 ```
 * Run the `start` task to launch the site in development mode:
 ```
-yarn start
+npm start
 ```
 * You should now be able to view the site at http://localhost:5000/.
 
@@ -84,13 +83,13 @@ Visual Studio Code is recommended for development and debugging.
 
 #### Development
 
-When running the site via `yarn start` (as above), the server will update and refresh automatically as you make changes, so you can see changes when you refresh the browser window.
+When running the site via `npm start` (as above), the server will update and refresh automatically as you make changes, so you can see changes when you refresh the browser window.
 
 You can also install the [LiveReload browser extension](http://livereload.com/extensions/) for your browser of choice so that the site will reload automatically following changes, without the need to manually refresh.
 
 #### Debugging
 
-With the site running via `yarn start`, you can debug the Node process in Visual Studio Code by using the **Attach** configuration, either:
+With the site running via `npm start`, you can debug the Node process in Visual Studio Code by using the **Attach** configuration, either:
 
 * Press **F5**; or
 * Open the debug tab and click the green play button
