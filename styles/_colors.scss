@@ -13,13 +13,17 @@ $text-white: #F0F0FF;
 $text-error: #DC143C;
 
 // Region colors (separator, entry).
+$purple-region: (#8F84F7, #C3BDFB);
+$blue-region: (#9ABAF9, #B7CEFB);
+$red-region: (#D4BEDA, #E4CEEA);
 $regions: (
-  kanto: (#9084F8, #C9C9FF),
-  johto: (#96BAF7, #BED3FE),
-  hoenn: (#7CA6F9, #B6C6F9),
-  sinnoh: (#9ABAF9, #BFCBFB),
-  unova: (#9084F8, #C9C9FF),
-  kalos: (#96BAF7, #BED3FE),
-  alola: (#7CA6F9, #B6C6F9),
-  unknown: (#D4BEDA, #E4CEEA)
+  kanto: $purple-region,
+  johto: $blue-region,
+  hoenn: $purple-region,
+  sinnoh: $blue-region,
+  unova: $purple-region,
+  kalos: $purple-region,
+  alola: $blue-region,
+  galar: $red-region,
+  unknown: $red-region
 );
