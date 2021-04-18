@@ -1,7 +1,6 @@
 const express = require('express')
 const basicAuth = require('express-basic-auth')
 const exphbs = require('express-handlebars')
-const enforce = require('express-sslify')
 const Flickr = require('flickrapi')
 const mcache = require('memory-cache')
 
@@ -9,7 +8,7 @@ const cache = require('./helpers/cache')
 const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const GENERATIONS = require('./config/generations')
 
-const BASE_URL = 'https://www.photodex.io'
+const BASE_URL = 'http://www.photodex.io'
 
 const PHOTODEX_REGEX = new RegExp('phot[oó]dex', 'i')
 const FLICKR_PER_PAGE = 500
@@ -22,10 +21,6 @@ const FIND_USER_CACHE_SECONDS = parseInt(process.env.FIND_USER_CACHE_SECONDS) ||
 const app = express()
 
 app.use(express.static('public'))
-
-if (process.env.ENFORCE_HTTPS === 'yes') {
-  app.use(enforce.HTTPS({ trustProtoHeader: true }))
-}
 
 const hbs = exphbs.create({ defaultLayout: 'main', helpers: handlebarsHelpers })
 app.engine('handlebars', hbs.engine)

@@ -11,7 +11,7 @@ The site is powered by the [Flickr API](https://www.flickr.com/services/api/) an
 * The album must be public and contain the word "Photódex" in the title.
 * The individual photo titles must contain the 3-digit Pokémon number (e.g. "001 Bulbasaur").
 
-If you would like to set up your own Photódex, all of the instructions are here: https://www.photodex.io/
+If you would like to set up your own Photódex, all of the instructions are here: http://www.photodex.io/
 
 ![JTAtomico's Photódex](https://i.imgur.com/9BNdNzK.jpg)
 
@@ -60,9 +60,6 @@ ADMIN_PASSWORD = your_password
 
 # Comma-separated list of usernames to show in the 'Featured' section of the home page.
 FEATURED = JTAtomico,GeorgeFromCamp,BeppisMAX
-
-# Do not enforce HTTPS locally.
-ENFORCE_HTTPS = no
 
 # Various cache durations for different endpoints and API calls.
 # These are optional and can be omitted.
