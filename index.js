@@ -60,7 +60,8 @@ app.get('/admin/dashboard', auth, async (req, res) => {
 })
 
 app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
-  let { username } = req.params
+  const { redirected } = req.query
+  const { username } = req.params
   try {
     const flickr = await getFlickr()
     const user = await findUser(flickr, username)
@@ -83,7 +84,8 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
     Object.keys(photoMap).forEach(key => {
       photoMap[key] = photoMap[key].map(photo => { return { galleryUrl: photo.galleryUrl } })
     })
-    res.render('dex', { subtitle, trainer, og, flickrUrl, generations, photoMap: JSON.stringify(photoMap) })
+    const showAnnouncement = redirected === 'true'
+    res.render('dex', { subtitle, trainer, og, flickrUrl, generations, photoMap: JSON.stringify(photoMap), showAnnouncement })
   } catch (error) {
     clearCaches(username)
     const subtitle = '404: Not found!'
