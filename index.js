@@ -44,7 +44,7 @@ let _flickr = null
 app.get('/', cache(HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
   const { username, redirected } = req.query
   if (username) {
-    res.redirect(getDexUrl(username))
+    res.redirect(getDexUrl(username, redirected))
   } else {
     const featuredUsernames = (process.env.FEATURED || '').split(',')
     const featured = await getTrainerCards(featuredUsernames)
@@ -66,7 +66,7 @@ app.get('/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req, res) => {
     const flickr = await getFlickr()
     const user = await findUser(flickr, username)
     if (user.username !== username) {
-      res.redirect(getDexUrl(user.username))
+      res.redirect(getDexUrl(user.username, redirected))
       return
     }
     const { photosetId, photoMap, previewUrl, trainerOverride } = await getPhotos(flickr, user.userId, true)
@@ -107,8 +107,9 @@ app.get('/api/trainer/:username', cache(DEX_RESPONSE_CACHE_SECONDS), async (req,
   }
 })
 
-function getDexUrl (username) {
-  return `/${encodeURIComponent(username)}`
+function getDexUrl (username, redirected) {
+  const path = `/${encodeURIComponent(username)}`
+  return redirected ? `${path}?redirected=${redirected}` : path
 }
 
 function getFlickrUrl (userId, photosetId) {
