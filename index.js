@@ -42,13 +42,14 @@ const recentlyVisited = new Set()
 let _flickr = null
 
 app.get('/', cache(HOME_RESPONSE_CACHE_SECONDS), async (req, res) => {
-  const { username } = req.query
+  const { username, redirected } = req.query
   if (username) {
     res.redirect(getDexUrl(username))
   } else {
     const featuredUsernames = (process.env.FEATURED || '').split(',')
     const featured = await getTrainerCards(featuredUsernames)
-    res.render('home', { subtitle: "Gotta snap 'em all!", featured })
+    const showAnnouncement = redirected === 'true'
+    res.render('home', { subtitle: "Gotta snap 'em all!", featured, showAnnouncement })
   }
 })
 

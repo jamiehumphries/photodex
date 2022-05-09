@@ -24,6 +24,23 @@
 </head>
 
 <body class="{{@exphbs.view}}-view">
+  {{#if showAnnouncement}}
+    <div id="announcement">
+      <p>
+        You have been redirected to <strong>photodex.herokuapp.com</strong>
+        from <strong>www.photodex.io</strong>.
+      </p>
+      <p>
+        <strong>www.photodex.io</strong> will expire at the end of 2022 and will not be renewed,
+        but <strong>photodex.herokuapp.com</strong> will remain accessible.
+      </p>
+      <p>
+        If you would like to take ownership of <strong>www.photodex.io</strong> to continue hosting this site there,
+        please email <a href="mailto:jtatomico@gmail.com">jtatomico@gmail.com</a>.
+      </p>
+      <button onclick="window.location = '/'">Got it!</button>
+    </div>
+  {{/if}}
   <div class="banner">
     <h1><a href="/">Photódex</a></h1>
     {{#if trainer}}

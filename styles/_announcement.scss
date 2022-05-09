@@ -1,0 +1,14 @@
+#announcement {
+  z-index: 2;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  color: white;
+  background-color: darkred;
+  a {
+    color: white;
+  }
+  button {
+    margin-bottom: 1rem;
+  }
+}
